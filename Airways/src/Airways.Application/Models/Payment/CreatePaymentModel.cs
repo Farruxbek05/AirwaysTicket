@@ -1,6 +1,6 @@
-﻿namespace Airways.Application.Models;
+﻿namespace Airways.Application.Models.Payment;
 
-public class Payment
+public class CreatePaymentModel
 {
     public int ID { get; set; }
     public decimal Amount { get; set; }
@@ -9,6 +9,7 @@ public class Payment
     public Guid User_id { get; set; }
     public Guid Order_id { get; set; }
 }
+public class CreatePaymentResponceModel : BaseResponceModel { }
 
 public enum PayStatus
 {

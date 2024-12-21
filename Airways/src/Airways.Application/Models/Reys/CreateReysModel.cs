@@ -1,6 +1,6 @@
-﻿namespace Airways.Application.Models;
+﻿namespace Airways.Application.Models.Reys;
 
-public class Reys
+public class CreateReysModel
 {
     public int ID { get; set; }
     public int TicketCount { get; set; }
@@ -12,3 +12,4 @@ public class Reys
     public Guid Airline_id { get; set; }
     public Guid aAircraft_id { get; set; }
 }
+public class CreateReysResponceModel : BaseResponceModel { }

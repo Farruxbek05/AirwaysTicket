@@ -1,6 +1,6 @@
-﻿namespace Airways.Application.Models;
+﻿namespace Airways.Application.Models.Review;
 
-public class Review
+public class CreateReviewModel
 {
     public int ID { get; set; }
     public int Rating { get; set; }
@@ -8,3 +8,4 @@ public class Review
     public Guid User_id { get; set; }
     public Guid Reys_id { get; set; }
 }
+public class CreateReviewResponceModel : BaseResponceModel { }

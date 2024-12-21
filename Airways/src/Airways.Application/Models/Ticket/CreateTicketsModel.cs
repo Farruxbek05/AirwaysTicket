@@ -1,6 +1,6 @@
-﻿namespace Airways.Application.Models;
+﻿namespace Airways.Application.Models.Ticket;
 
-public class Tickets
+public class CreateTicketsModel
 {
     public int ID { get; set; }
     public double price { get; set; }
@@ -15,6 +15,7 @@ public class Tickets
     public Guid PricePolicy_id { get; set; }
 
 }
+public class CreateTicketResponceModel : BaseResponceModel { }
 
 enum Status
 {

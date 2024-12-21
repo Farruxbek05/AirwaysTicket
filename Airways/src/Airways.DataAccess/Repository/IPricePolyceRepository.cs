@@ -2,5 +2,5 @@
 
 namespace Airways.DataAccess.Repository;
 
-    internal interface IPricePolyceRepository : IBaseRepository<PricePolicy> { }
+    public interface IPricePolyceRepository : IBaseRepository<PricePolicy> { }
   
