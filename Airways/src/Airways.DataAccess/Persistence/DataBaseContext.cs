@@ -1,4 +1,5 @@
 ﻿using Airways.Core.Common;
+using Airways.Core.Entity;
 using Airways.DataAccess.Identity;
 using Airways.Shared.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -13,10 +14,20 @@ namespace Airways.DataAccess.Persistence;
 
         public DataBaseContext(DbContextOptions options, IClaimService claimService) : base(options)
         {
-            _claimService = claimService;
-            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        _claimService = claimService ?? throw new ArgumentNullException(nameof(claimService));
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
+         public DbSet<Aicraft> Aicrafts { get; set; }
+         public DbSet<Airline> Airlines { get; set; }
+         public DbSet<Class> Classes { get; set; }
+         public DbSet<Order> Orders { get; set; }
+         public DbSet<Payment> Payments { get; set; }
+         public DbSet<PricePolicy> PricesPolicies { get; set; }
+         public DbSet<Review> Reviews { get; set; }
+         public DbSet<Reys> Reys { get; set; }
+         public DbSet<Tickets> Tickets { get; set; }
+         public DbSet<User> AirwaysUser {  get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

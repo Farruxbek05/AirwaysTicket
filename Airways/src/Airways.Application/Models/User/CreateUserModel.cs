@@ -9,6 +9,7 @@ public class CreateUserModel
     Role role { get; set; }
 }
 
+
 public class CreateUserResponceModel : BaseResponceModel { }
 enum Role
 {
