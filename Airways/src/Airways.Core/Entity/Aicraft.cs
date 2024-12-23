@@ -12,11 +12,11 @@ namespace Airways.Core.Entity
         public virtual Airline airline { get; set; }
 
         public List<Reys> reys = new List<Reys>();
-        public string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
-        public string UpdatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
     }

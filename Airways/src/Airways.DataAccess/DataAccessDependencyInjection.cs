@@ -15,27 +15,23 @@ namespace Airways.DataAccess
         public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDatabase(configuration);
-
             services.AddIdentity();
-
             services.AddRepositories();
-
             return services;
         }
 
         private static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IAircraftRepository, AicraftRepository>();
-            services.AddScoped<IAirlineRepository,Airlinerepository>();
+            services.AddScoped<IAirlineRepository, Airlinerepository>();
             services.AddScoped<IClassRepository, ClassRepository>();
-            services.AddScoped<IOrderRepository,OrderRepository>(); 
-            services.AddScoped<IPaymentRepository,PaymentRepository>();
-            services.AddScoped<IPricePolyceRepository,PricePolicyRepository>();
-            services.AddScoped<IReviewRepository,ReviewRepository>();
-            services.AddScoped<IReysRepository,ReysRepository>();
-            services.AddScoped<ITicketRepository,TicketRepository>();
-            services.AddScoped<IUserRepository,UserRepository>();
-            
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IPaymentRepository, PaymentRepository>();
+            services.AddScoped<IPricePolyceRepository, PricePolicyRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<IReysRepository, ReysRepository>();
+            services.AddScoped<ITicketRepository, TicketRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
@@ -43,15 +39,16 @@ namespace Airways.DataAccess
             var databaseConfig = configuration.GetSection("Database").Get<DatabaseConfiguration>();
 
             if (databaseConfig.UseInMemoryDatabase)
+            {
                 services.AddDbContext<DataBaseContext>(options =>
-                {
-                    options.UseInMemoryDatabase("AirwaysDatabase");
-                    options.ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
-                });
+                    options.UseInMemoryDatabase("AirwaysDatabase"));
+            }
             else
+            {
                 services.AddDbContext<DataBaseContext>(options =>
                     options.UseNpgsql(databaseConfig.ConnectionString,
-                        opt => opt.MigrationsAssembly(typeof(DataBaseContext).Assembly.FullName)));
+                        npgsqlOptions => npgsqlOptions.MigrationsAssembly(typeof(DataBaseContext).Assembly.FullName)));
+            }
         }
 
         private static void AddIdentity(this IServiceCollection services)
@@ -79,12 +76,9 @@ namespace Airways.DataAccess
         }
     }
 
-    // TODO move outside?
     public class DatabaseConfiguration
     {
         public bool UseInMemoryDatabase { get; set; }
-
         public string ConnectionString { get; set; }
     }
-
 }

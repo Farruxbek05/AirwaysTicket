@@ -1,7 +1,6 @@
-﻿using Airways.Application.Models.User;
-using Airways.Application.Models;
+﻿using Airways.Application.Models;
+using Airways.Application.Models.User;
 using Airways.Application.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airways.API.Controllers
@@ -10,9 +9,9 @@ namespace Airways.API.Controllers
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService todoItemService)
+        public UserController(IUserService aicraftService)
         {
-            _userService = todoItemService;
+            _userService = aicraftService;
         }
 
         [HttpPost]

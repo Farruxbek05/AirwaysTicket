@@ -8,40 +8,43 @@ using System.Reflection;
 
 namespace Airways.DataAccess.Persistence;
 
-    public class DataBaseContext : IdentityDbContext<ApplicationUser>
+public class DataBaseContext : IdentityDbContext<ApplicationUser>
+{
+    private IClaimService? _claimService;
+
+    public DataBaseContext(DbContextOptions<DataBaseContext> options, IClaimService claimService) : base(options)
     {
-        private readonly IClaimService _claimService;
-
-        public DataBaseContext(DbContextOptions options, IClaimService claimService) : base(options)
-        {
-        _claimService = claimService ?? throw new ArgumentNullException(nameof(claimService));
+        _claimService = claimService;
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
-        }
-         public DbSet<Aicraft> Aicrafts { get; set; }
-         public DbSet<Airline> Airlines { get; set; }
-         public DbSet<Class> Classes { get; set; }
-         public DbSet<Order> Orders { get; set; }
-         public DbSet<Payment> Payments { get; set; }
-         public DbSet<PricePolicy> PricesPolicies { get; set; }
-         public DbSet<Review> Reviews { get; set; }
-         public DbSet<Reys> Reys { get; set; }
-         public DbSet<Tickets> Tickets { get; set; }
-         public DbSet<User> AirwaysUser {  get; set; }
+        AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+    }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    
+    
 
-            base.OnModelCreating(builder);
+    public DbSet<Aicraft> Aicrafts { get; set; }
+    public DbSet<Airline> Airlines { get; set; }
+    public DbSet<Class> Classes { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<PricePolicy> PricesPolicies { get; set; }
+    public DbSet<Review> Reviews { get; set; }
+    public DbSet<Reys> Reys { get; set; }
+    public DbSet<Tickets> Tickets { get; set; }
+    public DbSet<User> AirwaysUser { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        base.OnModelCreating(builder);
+    }
 
-        }
-
-
-        public new async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    public new async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        if (_claimService != null)
         {
             foreach (var entry in ChangeTracker.Entries<IAuditedEntity>())
+            {
                 switch (entry.State)
                 {
                     case EntityState.Added:
@@ -53,7 +56,12 @@ namespace Airways.DataAccess.Persistence;
                         entry.Entity.UpdatedOn = DateTime.Now;
                         break;
                 }
-
-            return await base.SaveChangesAsync(cancellationToken);
+            }
         }
+
+        return await base.SaveChangesAsync(cancellationToken);
     }
+}
+
+
+

@@ -11,19 +11,19 @@ using Airways.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
-    builder.Services.AddControllers(
-        config => config.Filters.Add(typeof(ValidateModelAttribute))
+builder.Services.AddControllers(
+    config => config.Filters.Add(typeof(ValidateModelAttribute))
 );
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(IValidationsMarker));
 
-builder.Services.AddSwagger();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddDataAccess(builder.Configuration)
     .AddApplication(builder.Environment);
 
-    builder.Services.AddJwt(builder.Configuration);
+builder.Services.AddJwt(builder.Configuration);
 
 builder.Services.AddEmailConfiguration(builder.Configuration);
 

@@ -16,11 +16,11 @@ namespace Airways.Core.Entity
         public virtual Class cclass { get; set; }
         public virtual PricePolicy pricePolicy { get; set; }
         public List<Order> orders=new List<Order>();
-        public string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
-        public string UpdatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
 
         public DateTime? UpdatedOn { get; set; }
 
