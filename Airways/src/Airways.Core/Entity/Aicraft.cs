@@ -4,12 +4,12 @@ namespace Airways.Core.Entity
 {
     public class Aicraft:BaseEntity,IAuditedEntity
     {
-        public int ID { get; set; }
+       
         public string Name { get; set; }
         public string Description { get; set; }
         public string Model { get; set; }
         public int SeatCapacity { get; set; }
-        public virtual Airline airline { get; set; }
+        public  Airline Airline { get; set; }
 
         public List<Reys> reys = new List<Reys>();
         public string? CreatedBy { get; set; }

@@ -1,8 +1,10 @@
-﻿namespace Airways.Application.Models.Reys
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Airways.Application.Models.Reys
 {
     public class UpdateReysModel
     {
-        public int ID { get; set; }
+       
         public int TicketCount { get; set; }
         public string DepartureCity { get; set; }
         public string ArrivalCity { get; set; }

@@ -4,7 +4,7 @@ namespace Airways.Core.Entity
 {
     public  class PricePolicy:BaseEntity,IAuditedEntity
     {
-        public int ID { get; set; }
+      
         public decimal DiscountPercentage { get; set; }
         public string Conditions { get; set; }
         public List<Tickets> tickets = new List<Tickets>();

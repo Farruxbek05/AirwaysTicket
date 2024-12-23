@@ -4,7 +4,7 @@ namespace Airways.Core.Entity
 {
     public class Airline:BaseEntity,IAuditedEntity
     {
-        public int ID { get; set; }
+        
         public string Name { get; set; }
         public string Country { get; set; }
         public Guid Code { get; set; }

@@ -1,8 +1,11 @@
-﻿namespace Airways.Application.Models.Aicraft
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Airways.Application.Models.Aicraft
 {
     public class UpdateAicraftModel
     {
-        public int ID { get; set; }
+      
+     
         public string Name { get; set; }
         public string Description { get; set; }
         public string Model { get; set; }

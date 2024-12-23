@@ -4,12 +4,12 @@ namespace Airways.Core.Entity
 {
     public class Payment:BaseEntity,IAuditedEntity
     {
-        public int ID { get; set; }
+      
         public decimal Amount { get; set; }
         public PayStatus payStatus { get; set; }
         public CardType paymentType { get; set; }
-        public virtual User user { get; set; }
-        public virtual Order order { get; set; }
+        public User User { get; set; }
+        public Order Order { get; set; }
         public string? CreatedBy { get; set; }
 
         public DateTime? CreatedOn { get; set; }

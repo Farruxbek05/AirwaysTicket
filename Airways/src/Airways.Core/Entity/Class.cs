@@ -4,7 +4,7 @@ namespace Airways.Core.Entity
 {
     public class Class:BaseEntity,IAuditedEntity
     {
-        public int ID { get; set; }
+     
         public ClassType className { get; set; }
         public string description { get; set; }
         public List<Tickets> tickets = new List<Tickets>();

@@ -4,10 +4,10 @@ namespace Airways.Core.Entity
 {
     public class Order:BaseEntity,IAuditedEntity
     {
-        public int ID { get; set; }
+        
         public decimal TotalPrice { get; set; }
-        public virtual User users { get; set; }
-        public virtual Tickets tickets { get; set; }
+        public  User User { get; set; }
+        public  Tickets Tickets { get; set; }
         public  List<Payment> payment = new List<Payment>();
         public string?  CreatedBy { get; set; }
 
