@@ -18,7 +18,7 @@ builder.Services.AddControllers(
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining(typeof(IValidationsMarker));
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(); 
 
 builder.Services.AddDataAccess(builder.Configuration)
     .AddApplication(builder.Environment);
