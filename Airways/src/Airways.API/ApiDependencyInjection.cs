@@ -9,7 +9,7 @@ namespace Airways.API
     {
         public static void AddJwt(this IServiceCollection services, IConfiguration configuration)
         {
-            var secretKey = configuration.GetValue<string>("JwtConfiguration:SecretKey");
+            var secretKey = configuration.GetValue<string>("JwtOptions:SecretKey");
 
             var key = Encoding.ASCII.GetBytes(secretKey);
 

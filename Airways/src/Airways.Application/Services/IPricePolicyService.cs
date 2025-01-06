@@ -15,5 +15,7 @@ namespace Airways.Application.Services
 
         Task<UpdatePricePolicyResponceModel> UpdateAsync(Guid id, UpdatePricePolicyModel updateTodoItemModel,
             CancellationToken cancellationToken = default);
+     
+
     }
 }

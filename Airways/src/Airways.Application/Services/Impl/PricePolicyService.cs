@@ -1,13 +1,12 @@
-﻿using Airways.Application.Models.Airline;
-using Airways.Application.Models;
+﻿using Airways.Application.Models;
+using Airways.Application.Models.PricePolycy;
 using Airways.Core.Entity;
 using Airways.DataAccess.Repository;
 using AutoMapper;
-using Airways.Application.Models.PricePolycy;
 
 namespace Airways.Application.Services.Impl
 {
-    public class PricePolicyService:IPricePolicyService
+    public class PricePolicyService : IPricePolicyService
     {
         private readonly IMapper _mapper;
         private readonly IPricePolyceRepository _pricepolicyRepository;
@@ -31,13 +30,20 @@ namespace Airways.Application.Services.Impl
         public async Task<CreatePricePolicyResponceModel> CreateAsync(CreatePricePolicyModel createTodoItemModel,
             CancellationToken cancellationToken = default)
         {
-            var todoItem = _mapper.Map<PricePolicy>(createTodoItemModel);
-
-
-            return new CreatePricePolicyResponceModel
+            try
             {
-                Id = (await _pricepolicyRepository.AddAsync(todoItem)).Id
-            };
+                var todoItem = _mapper.Map<PricePolicy>(createTodoItemModel);
+
+                return new CreatePricePolicyResponceModel
+                {
+                    Id = (await _pricepolicyRepository.AddAsync(todoItem)).Id
+                };
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         public async Task<UpdatePricePolicyResponceModel> UpdateAsync(Guid id, UpdatePricePolicyModel updateTodoItemModel,
@@ -62,5 +68,7 @@ namespace Airways.Application.Services.Impl
                 Id = (await _pricepolicyRepository.DeleteAsync(todoItem)).Id
             };
         }
+
+        
     }
 }

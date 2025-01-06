@@ -15,5 +15,6 @@ namespace Airways.Application.Services
 
         Task<UpdateAicraftResponceModel> UpdateAsync(Guid id, UpdateAicraftModel updateTodoItemModel,
             CancellationToken cancellationToken = default);
+      
     }
 }

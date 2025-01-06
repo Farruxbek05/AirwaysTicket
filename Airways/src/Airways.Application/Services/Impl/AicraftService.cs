@@ -21,7 +21,8 @@ namespace Airways.Application.Services.Impl
         public async Task<IEnumerable<AicraftResponceModel>> GetAllByListIdAsync(Guid id,
             CancellationToken cancellationToken = default)
         {
-            var todoItems = await _aicraftrepository.GetAllAsync(ti => ti.Id == id);
+            var todoItems = await _aicraftrepository.GetAllAsync(ti => ti.Airline.Id == id);
+
 
             return _mapper.Map<IEnumerable<AicraftResponceModel>>(todoItems);
         }
@@ -40,7 +41,7 @@ namespace Airways.Application.Services.Impl
         public async Task<UpdateAicraftResponceModel> UpdateAsync(Guid id, UpdateAicraftModel updateTodoItemModel,
             CancellationToken cancellationToken = default)
         {
-            var todoItem = await _aicraftrepository.GetFirstAsync(ti => ti.Id == id);
+            var todoItem = await _aicraftrepository.GetFirstAsync(ti => ti.Airline.Id == id);
 
             _mapper.Map(updateTodoItemModel, todoItem);
 

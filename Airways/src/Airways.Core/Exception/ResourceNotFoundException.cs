@@ -3,16 +3,16 @@
 namespace Airways.Core.Exceptions
 {
     [Serializable]
-    public class ResourceNotFoundException : Exception
+    public class ResourceNotFound : Exception
     {
-        public ResourceNotFoundException() { }
+        public ResourceNotFound() { }
 
-        public ResourceNotFoundException(Type type) : base($"{type} is missing") { }
+        public ResourceNotFound(Type type) : base($"{type} is missing") { }
 
-        protected ResourceNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        protected ResourceNotFound(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
-        public ResourceNotFoundException(string? message) : base(message) { }
+        public ResourceNotFound(string? message) : base(message) { }
 
-        public ResourceNotFoundException(string? message, Exception? innerException) : base(message, innerException) { }
+        public ResourceNotFound(string? message, Exception? innerException) : base(message, innerException) { }
     }
 }

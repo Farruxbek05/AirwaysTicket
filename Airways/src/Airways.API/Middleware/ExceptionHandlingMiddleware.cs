@@ -1,21 +1,20 @@
-﻿using Airways.Application.Exceptions;
-using Airways.Application.Models;
+﻿using Airways.Application.Models;
 using Airways.Core.Exceptions;
 using Newtonsoft.Json;
 
 namespace Airways.API.Middleware;
 
-public class ExceptionHandlingMiddleware
+public class ExceptionHandlerMiddlewear
 {
-    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+
+    private readonly ILogger<ExceptionHandlerMiddlewear> _logger;
     private readonly RequestDelegate _next;
 
-    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
+    public ExceptionHandlerMiddlewear(ILogger<ExceptionHandlerMiddlewear> logger, RequestDelegate next)
     {
-        _next = next;
         _logger = logger;
+        _next = next;
     }
-
 
     public async Task Invoke(HttpContext context)
     {
@@ -34,15 +33,19 @@ public class ExceptionHandlingMiddleware
         _logger.LogError(ex.Message);
 
         var code = StatusCodes.Status500InternalServerError;
-        var errors = new List<string> { ex.InnerException?.Message };
+        var errors = new List<string> { ex.Message };
+
+        if (ex.InnerException != null)
+        {
+            errors.Add(ex.InnerException.Message);
+        }
 
         code = ex switch
         {
-            NotFoundException => StatusCodes.Status404NotFound,
-            ResourceNotFoundException => StatusCodes.Status404NotFound,
-            BadRequestException => StatusCodes.Status400BadRequest,
-            UnprocessableRequestException => StatusCodes.Status422UnprocessableEntity,
-            _ => code
+            DirectoryNotFoundException => StatusCodes.Status404NotFound,
+            ResourceNotFound => StatusCodes.Status404NotFound,
+            BadHttpRequestException => StatusCodes.Status400BadRequest,
+
         };
 
         var result = JsonConvert.SerializeObject(ApiResult<string>.Failure(errors));
@@ -53,5 +56,6 @@ public class ExceptionHandlingMiddleware
         return context.Response.WriteAsync(result);
     }
 }
+
 
 

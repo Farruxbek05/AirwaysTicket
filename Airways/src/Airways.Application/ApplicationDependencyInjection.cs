@@ -1,14 +1,14 @@
-﻿using Airways.Application.Services.Impl;
+﻿using Airways.Application.Common.Email;
+using Airways.Application.MappingProfiles;
 using Airways.Application.Services;
-using Airways.Shared.Services.Impl;
+using Airways.Application.Services.DevImpl;
+using Airways.Application.Services.Impl;
 using Airways.Shared.Services;
+using Airways.Shared.Services.Impl;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Airways.Application.Services.DevImpl;
-using Airways.Application.Common.Email;
-using Airways.Application.MappingProfiles;
 
 namespace Airways.Application
 {
@@ -28,9 +28,9 @@ namespace Airways.Application
         private static void AddServices(this IServiceCollection services, IWebHostEnvironment env)
         {
             services.AddScoped<IClaimService, ClaimService>();
-            services.AddScoped<IAircraftService,AicraftService>();
+            services.AddScoped<IAircraftService, AicraftService>();
             services.AddScoped<IAirlineService, AirlineService>();
-            services.AddScoped<IClassService, ClassService>();  
+            services.AddScoped<IClassService, ClassService>();
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IPricePolicyService, PricePolicyService>();
             services.AddScoped<IReviewservice, ReviewService>();
@@ -39,6 +39,9 @@ namespace Airways.Application
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IClaimService, ClaimService>();
+            services.AddScoped<ITemplateService, TemplateService>();
+            services.AddScoped<IClaimService, ClaimService>();
+
 
             if (env.IsDevelopment())
                 services.AddScoped<IEmailService, DevEmailService>();

@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Airways.Core\Airways.Core.csproj" />
     <ProjectReference Include="..\Airways.DataAccess\Airways.DataAccess.csproj" />
   </ItemGroup>
 

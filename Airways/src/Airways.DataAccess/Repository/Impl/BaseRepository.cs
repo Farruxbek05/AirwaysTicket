@@ -49,7 +49,7 @@ namespace Airways.DataAccess.Repository.Impl
         {
             var entity = await DbSet.Where(predicate).FirstOrDefaultAsync();
 
-            if (entity == null) throw new ResourceNotFoundException(typeof(TEntity));
+            if (entity == null) throw new ResourceNotFound(typeof(TEntity));
 
             return await DbSet.Where(predicate).FirstOrDefaultAsync();
         }

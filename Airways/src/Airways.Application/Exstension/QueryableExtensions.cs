@@ -1,63 +1,47 @@
-﻿using Airways.Application.Models;
+﻿using Airways.Application.Exceptions;
+using Airways.Application.Models;
 using Airways.Core.Common;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Airways.Application.Exstension
 {
     public static class QueryableExtensions
     {
-        public static async Task<PagedResult<T>> ToPagedResultAsync<T>(this IQueryable<T> query, Option options) where T : BaseEntity
+        private static int maxPageSize = 100;
+        private static string paginationKey = "X-Pagination";
+        public static IQueryable<T> ToPagedList<T>(
+        this IQueryable<T> source,
+        HttpContext httpContext,
+        int pageSize,
+        int pageIndex)
         {
-            if (options.PageNumber < 1)
-                options.PageNumber = 1;
-
-            if (options.PageSize < 1)
-                options.PageSize = 10;
-
-            var totalCount = await query.CountAsync();
-
-            var items = await query
-               .Skip((options.PageNumber - 1) * options.PageSize)
-               .Take(options.PageSize)
-               .ToListAsync();
-
-            return new PagedResult<T>
+            if (pageSize <= 0 || pageIndex <= 0)
             {
-                Items = items,
-                TotalCount = totalCount,
-                PageSize = options.PageSize,
-                PageNumber = options.PageNumber
-            };
-        }
+                throw new ValidationException(
+                    "Page size or index should be greater than 0");
+            }
 
-        public static async Task<PagedResult<TEntityDTO>> ToPagedResultAsync<TEntity, TEntityDTO>(
-            this IQueryable<TEntity> query,
-            Option options,
-            IMapper mapper) where TEntity : BaseEntity
-        {
-            if (options.PageNumber < 1)
-                options.PageNumber = 1;
-
-            if (options.PageSize < 1)
-                options.PageSize = 10;
-
-            var totalCount = await query.CountAsync();
-
-            var items = await query
-               .Skip((options.PageNumber - 1) * options.PageSize)
-               .Take(options.PageSize)
-               .ProjectTo<TEntityDTO>(mapper.ConfigurationProvider)
-               .ToListAsync();
-
-            return new PagedResult<TEntityDTO>
+            if (pageSize > maxPageSize)
             {
-                Items = items,
-                TotalCount = totalCount,
-                PageSize = options.PageSize,
-                PageNumber = options.PageNumber
-            };
+                throw new ValidationException(
+                    $"Page size should be less than {maxPageSize}");
+            }
+
+            var paginationMetadata = new PaginationMetadata(
+                totalCount: source.Count(),
+                currentPage: pageIndex,
+                pageSize: pageSize);
+
+            httpContext.Response.Headers[paginationKey] = JsonSerializer
+                .Serialize(paginationMetadata);
+
+            return source
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize);
         }
     }
 }

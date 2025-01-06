@@ -13,7 +13,6 @@ namespace Airways.API.Controllers
         {
             _classService = classService;
         }
-
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateCLassModel createUserModel)
         {

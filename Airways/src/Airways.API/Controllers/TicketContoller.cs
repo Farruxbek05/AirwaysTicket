@@ -1,12 +1,11 @@
-﻿using Airways.Application.Models.User;
-using Airways.Application.Models;
+﻿using Airways.Application.Models;
+using Airways.Application.Models.Ticket;
 using Airways.Application.Services;
 using Microsoft.AspNetCore.Mvc;
-using Airways.Application.Models.Ticket;
 
 namespace Airways.API.Controllers
 {
-    public class TicketContoller:ApiController
+    public class TicketContoller : ApiController
     {
         private readonly ITicketService _ticketService;
 

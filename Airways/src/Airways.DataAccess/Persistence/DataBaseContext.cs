@@ -12,7 +12,7 @@ public class DataBaseContext : IdentityDbContext<ApplicationUser>
 {
     private IClaimService? _claimService;
 
-    public DataBaseContext(DbContextOptions<DataBaseContext> options, IClaimService claimService) : base(options)
+    public DataBaseContext(DbContextOptions options, IClaimService claimService) : base(options)
     {
         _claimService = claimService;
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

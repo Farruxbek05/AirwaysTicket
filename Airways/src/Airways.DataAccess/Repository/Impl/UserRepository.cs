@@ -3,8 +3,8 @@ using Airways.DataAccess.Persistence;
 
 namespace Airways.DataAccess.Repository.Impl
 {
-    public class UserRepository:BaseRepository<User>, IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public UserRepository(DataBaseContext context) : base(context) { }  
+      public  UserRepository(DataBaseContext dataBaseContext) : base(dataBaseContext) { }
     }
 }

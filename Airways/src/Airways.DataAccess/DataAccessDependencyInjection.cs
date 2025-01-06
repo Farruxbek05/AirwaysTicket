@@ -1,10 +1,10 @@
-﻿using Airways.DataAccess.Identity;
+﻿using Airways.DataAccess.Authentication;
+using Airways.DataAccess.Identity;
 using Airways.DataAccess.Persistence;
 using Airways.DataAccess.Repository;
 using Airways.DataAccess.Repository.Impl;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,6 +32,10 @@ namespace Airways.DataAccess
             services.AddScoped<IReysRepository, ReysRepository>();
             services.AddScoped<ITicketRepository, TicketRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IJwtTokenHandler, JwtTokenHandler>();
+
+
         }
 
         private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

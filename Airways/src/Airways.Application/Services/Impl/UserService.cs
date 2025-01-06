@@ -1,64 +1,122 @@
-﻿using Airways.Application.Models.Aicraft;
+﻿using Airways.Application.DTO;
 using Airways.Application.Models;
 using Airways.Core.Entity;
+using Airways.DataAccess;
+using Airways.DataAccess.Authentication;
 using Airways.DataAccess.Repository;
-using AutoMapper;
-using Airways.Application.Models.User;
+using Microsoft.AspNetCore.Http;
 
 namespace Airways.Application.Services.Impl
 {
-    public class UserService:IUserService
+    public class UserService : IUserService
     {
-        private readonly IMapper _mapper;
-        private readonly IUserRepository _usertrepository;
+        private readonly IUserRepository _users;
 
+        private readonly IPasswordHasher _passwordHasher;
         public UserService(IUserRepository userRepository,
-            IMapper mapper)
+            IPasswordHasher passwordHasher)
         {
-            _usertrepository = userRepository;
-            _mapper = mapper;
+            _users = userRepository;
+            _passwordHasher = passwordHasher;
         }
-
-        public async Task<IEnumerable<UserResponceModel>> GetAllByListIdAsync(Guid id,
-            CancellationToken cancellationToken = default)
+      
+        public async Task<UserDTO> GetByIdAsync(Guid id)
         {
-            var todoItems = await _usertrepository.GetAllAsync(ti => ti.Id == id);
+            var user = await _users.GetFirstAsync(u => u.Id == id);
+            
 
-            return _mapper.Map<IEnumerable<UserResponceModel>>(todoItems);
-        }
+            if (user == null)
+                return null;
 
-        public async Task<CreateUserResponceModel> CreateAsync(CreateUserModel createTodoItemModel,
-            CancellationToken cancellationToken = default)
-        {
-            var todoItem = _mapper.Map<User>(createTodoItemModel);
-
-            return new CreateUserResponceModel
+            return new UserDTO
             {
-                Id = (await _usertrepository.AddAsync(todoItem)).Id
+                Name = user.Name,
+                Email = user.Email,
+                Address = user.Address,
+                PassportId = user.PassportId
             };
         }
 
-        public async Task<UpdateusrResponceModel> UpdateAsync(Guid id, UpdateUserModel updateTodoItemModel,
-            CancellationToken cancellationToken = default)
+        public async Task<List<UserDTO>> GetAllAsync()
         {
-            var todoItem = await _usertrepository.GetFirstAsync(ti => ti.Id == id);
-
-            _mapper.Map(updateTodoItemModel, todoItem);
-
-            return new UpdateusrResponceModel
+            var users = await _users.GetAllAsync(u => true);
+            return users.Select(user => new UserDTO
             {
-                Id = (await _usertrepository.UpdateAsync(todoItem)).Id
-            };
+                Name = user.Name,
+                Email = user.Email,
+                Address = user.Address,
+                PassportId = user.PassportId
+            }).ToList();
         }
 
-        public async Task<BaseResponceModel> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<UserForCreationDTO> AddUserAsync(UserForCreationDTO userForCreationDTO)
         {
-            var todoItem = await _usertrepository.GetFirstAsync(ti => ti.Id == id);
+            if (userForCreationDTO == null)
+                throw new ArgumentNullException(nameof(userForCreationDTO));
 
-            return new BaseResponceModel
+            string randomSalt = Guid.NewGuid().ToString();
+
+            User user = new User
             {
-                Id = (await _usertrepository.DeleteAsync(todoItem)).Id
+                Name = userForCreationDTO.Name,
+                Email = userForCreationDTO.Email,
+                Address = userForCreationDTO.Address,
+                PassportId = userForCreationDTO.PassportId,
+
+                Salt = randomSalt,
+                Password = _passwordHasher.Encrypt(
+                    password: userForCreationDTO.Password,
+                    salt: randomSalt),
+                Role = "Admin"
             };
+            var res = await _users.AddAsync(user);
+            var result = new UserDTO
+            {
+                Address = userForCreationDTO.Address,
+                Email = userForCreationDTO.Email,
+                PassportId = userForCreationDTO.PassportId,
+                Name = userForCreationDTO.Name,
+            };
+            
+            return userForCreationDTO;
         }
+
+        public async Task<User> UpdateUserAsync(Guid id, UserDTO userDto)
+        {
+            
+            if (userDto == null)
+                throw new ArgumentNullException(nameof(userDto), "UserDTO cannot be null.");
+
+            
+            var user = await _users.GetFirstAsync(u => u.Id == id);
+
+            if (user == null)
+                return null;
+
+            
+            user.Name = userDto.Name;
+            user.Email = userDto.Email;
+            user.Address = userDto.Address;
+            user.PassportId = userDto.PassportId;
+
+          
+            await _users.UpdateAsync(user);
+
+            return user; 
+        }
+
+
+        public async Task<bool> DeleteUserAsync(Guid id)
+        {
+            var user = await _users.GetFirstAsync(u => u.Id == id);
+
+            if (user == null)
+                return false;
+
+            await _users.DeleteAsync(user);
+            return true;
+        }
+
+       
     }
 }

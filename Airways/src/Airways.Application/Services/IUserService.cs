@@ -1,19 +1,15 @@
-﻿using Airways.Application.Models;
-using Airways.Application.Models.User;
+﻿using Airways.Application.DTO;
+using Airways.Core.Entity;
+using Airways.DataAccess;
 
 namespace Airways.Application.Services
 {
     public interface IUserService
     {
-        Task<CreateUserResponceModel> CreateAsync(CreateUserModel createTodoItemModel,
-      CancellationToken cancellationToken = default);
-
-        Task<BaseResponceModel> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
-
-        Task<IEnumerable<UserResponceModel>>
-            GetAllByListIdAsync(Guid id, CancellationToken cancellationToken = default);
-
-        Task<UpdateusrResponceModel> UpdateAsync(Guid id, UpdateUserModel updateTodoItemModel,
-            CancellationToken cancellationToken = default);
+        Task<UserDTO> GetByIdAsync(Guid id);
+        Task<List<UserDTO>> GetAllAsync();
+        Task<UserForCreationDTO> AddUserAsync(UserForCreationDTO userForCreationDto);
+        Task<User> UpdateUserAsync(Guid id, UserDTO userDto);
+        Task<bool> DeleteUserAsync(Guid id);
     }
 }
