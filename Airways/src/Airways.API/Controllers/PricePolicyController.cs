@@ -1,12 +1,13 @@
 ﻿using Airways.Application.Models;
-using Airways.Application.Models.Aicraft;
 using Airways.Application.Models.PricePolycy;
 using Airways.Application.Services;
-using Airways.Application.Services.Impl;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airways.API.Controllers
 {
+    [Authorize(Policy ="Admin")]
+    [Route("api/pricepolicy")]
     public class PricePolicyController : ApiController
     {
         private readonly IPricePolicyService _pricepolicyService;
@@ -15,14 +16,13 @@ namespace Airways.API.Controllers
         {
             _pricepolicyService = pricepolicyService;
         }
-       
+
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreatePricePolicyModel createUserModel)
         {
             return Ok(ApiResult<CreatePricePolicyResponceModel>.Success(
                 await _pricepolicyService.CreateAsync(createUserModel)));
         }
-
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateAsync(Guid id, UpdatePricePolicyModel updateUserModel)
         {

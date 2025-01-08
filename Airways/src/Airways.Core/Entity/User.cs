@@ -10,7 +10,7 @@ namespace Airways.Core.Entity
         public string PassportId { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
-        public string Salt { get; set; }
+        public string Salt { get; set; } 
         public string? CreatedBy { get; set; }
 
         public DateTime? CreatedOn { get; set; }

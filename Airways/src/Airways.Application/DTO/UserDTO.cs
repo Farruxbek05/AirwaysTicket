@@ -1,4 +1,7 @@
-﻿namespace Airways.Application.DTO
+﻿using Airways.DataAccess.Authentication;
+using Microsoft.AspNetCore.Http;
+
+namespace Airways.Application.DTO
 {
     public class UserDTO
     {
@@ -10,6 +13,6 @@
         public required string Address { get; set; }
 
         public required string PassportId { get; set; }
-
+        public IFormFile ProfileImageFile { get; set; }
     }
 }

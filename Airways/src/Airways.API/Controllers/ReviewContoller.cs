@@ -20,7 +20,6 @@ namespace Airways.API.Controllers
             return Ok(ApiResult<CreateReviewResponceModel>.Success(
                 await _reviewService.CreateAsync(createUserModel)));
         }
-
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateAsync(Guid id, UpdateReviewModel updateUserModel)
         {

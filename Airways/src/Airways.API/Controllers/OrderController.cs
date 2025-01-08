@@ -1,10 +1,12 @@
 ﻿using Airways.Application.Models;
 using Airways.Application.Models.Order;
 using Airways.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airways.API.Controllers
 {
+    [Route("api/order")]
     public class OrderController : ApiController
     {
         private readonly IOrderService _orderService;

@@ -5,24 +5,35 @@ using Airways.Application;
 using Airways.DataAccess;
 using Airways.DataAccess.Authentication;
 using Airways.DataAccess.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Configure services
 builder.Services.AddControllers(
     config => config.Filters.Add(typeof(ValidateModelAttribute))
 );
 
-builder.Services.AddSwaggerGen();
 
-builder.Services.AddDataAccess(builder.Configuration)
+builder.Services.AddSwagger();
+
+
+
+ builder.Services.AddDataAccess(builder.Configuration)
     .AddApplication(builder.Environment);
 
 builder.Services.Configure<JwtOption>(builder.Configuration.GetSection("JwtOptions"));
 
 builder.Services.AddJwt(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("User", policy =>
+        policy.RequireClaim( "User"));
+    options.AddPolicy("Admin", policy =>
+        policy.RequireClaim( "Admin"));
+
+});
 
 
 
@@ -42,9 +53,12 @@ app.UseCors(corsPolicyBuilder =>
         .AllowAnyHeader()
 );
 
+
 app.UseRouting();
 
 app.UseAuthentication();
+
+
 
 app.UseAuthorization();
 

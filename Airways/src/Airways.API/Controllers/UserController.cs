@@ -11,11 +11,12 @@ namespace Airways.API.Controllers
     {
         private readonly IUserService _userService;
         private readonly IJwtTokenHandler _jwtTokenHandler;
-
-        public UserContorller(IUserService userService, IJwtTokenHandler jwtTokenHandler)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public UserContorller(IUserService userService, IJwtTokenHandler jwtTokenHandler, IWebHostEnvironment webHostEnvironment)
         {
             _userService = userService;
             _jwtTokenHandler = jwtTokenHandler;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -39,15 +40,42 @@ namespace Airways.API.Controllers
                 return BadRequest(ModelState);
             try
             {
-                var CreateUser = await _userService.AddUserAsync(userForCreationDTO);
-                var accesTokent = _jwtTokenHandler.GenerateAccesToken(CreateUser);
+
+                if (userForCreationDTO.ProfileImage != null && userForCreationDTO.ProfileImage.Length > 0)
+                {
+                    string folder = "Image/cover/";
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(userForCreationDTO.ProfileImage.FileName);
+                    string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+
+
+                    if (!Directory.Exists(serverFolder))
+                    {
+                        Directory.CreateDirectory(serverFolder);
+                    }
+
+
+                    string filePath = Path.Combine(serverFolder, fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await userForCreationDTO.ProfileImage.CopyToAsync(stream);
+                    }
+
+
+
+                }
+
+
+                var createUser = await _userService.AddUserAsync(userForCreationDTO);
+
+
+                var accessToken = _jwtTokenHandler.GenerateAccesToken(createUser);
                 var refreshToken = _jwtTokenHandler.GenerateRefreshToken();
 
                 return Ok(new
                 {
-                    AccessToken = new JwtSecurityTokenHandler().WriteToken(accesTokent),
+                    AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
                     RefreshToken = refreshToken,
-                    User = CreateUser
+                    User = createUser
                 });
             }
             catch (Exception ex)
@@ -55,6 +83,7 @@ namespace Airways.API.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+
 
         [HttpPut("update-user/{id}")]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UserDTO userDTO)

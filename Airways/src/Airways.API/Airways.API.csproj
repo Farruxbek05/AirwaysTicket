@@ -27,4 +27,8 @@
     <ProjectReference Include="..\Airways.Application\Airways.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

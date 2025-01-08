@@ -67,7 +67,7 @@ namespace Airways.Application.Services.Impl
                 Password = _passwordHasher.Encrypt(
                     password: userForCreationDTO.Password,
                     salt: randomSalt),
-                Role = "Admin"
+                Role = userForCreationDTO.role.ToString()
             };
             var res = await _users.AddAsync(user);
             var result = new UserDTO

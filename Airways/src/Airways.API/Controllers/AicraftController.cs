@@ -1,13 +1,12 @@
 ﻿using Airways.Application.Models;
 using Airways.Application.Models.Aicraft;
 using Airways.Application.Services;
-using Airways.Application.Services.Impl;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airways.API.Controllers
 {
-    [Authorize]
+
     public class AicraftController : ApiController
     {
         private readonly IAircraftService _aicraftService;

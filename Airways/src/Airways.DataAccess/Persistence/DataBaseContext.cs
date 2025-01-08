@@ -37,6 +37,7 @@ public class DataBaseContext : IdentityDbContext<ApplicationUser>
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         base.OnModelCreating(builder);
+
     }
 
     public new async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
