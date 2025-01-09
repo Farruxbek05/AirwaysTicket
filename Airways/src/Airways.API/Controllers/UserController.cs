@@ -32,6 +32,15 @@ namespace Airways.API.Controllers
             var res = await _userService.GetByIdAsync(id);
             return res == null ? NotFound() : Ok(res);
         }
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAllUser()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var res = await _userService.GetAllAsync();
+            return res == null ? NotFound() : Ok(res);
+        }
 
         [HttpPost("create-user")]
         public async Task<IActionResult> AddUser(UserForCreationDTO userForCreationDTO)
@@ -103,6 +112,5 @@ namespace Airways.API.Controllers
             var res = await _userService.DeleteUserAsync(ID);
             return res == null ? NotFound() : Ok(res);
         }
-
     }
 }
