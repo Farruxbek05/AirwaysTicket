@@ -1,13 +1,12 @@
-﻿using Airways.Application.Models.Airline;
-using Airways.Application.Models;
+﻿using Airways.Application.Models;
+using Airways.Application.Models.Review;
 using Airways.Core.Entity;
 using Airways.DataAccess.Repository;
 using AutoMapper;
-using Airways.Application.Models.Review;
 
 namespace Airways.Application.Services.Impl
 {
-    public class ReviewService:IReviewservice
+    public class ReviewService : IReviewservice
     {
         private readonly IMapper _mapper;
         private readonly IReviewRepository _reviewRepository;
@@ -20,23 +19,24 @@ namespace Airways.Application.Services.Impl
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ReviewResponceModel>> GetAllByListIdAsync(Guid id,
-            CancellationToken cancellationToken = default)
+        public async Task<List<ReviewResponceModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var todoItems = await _reviewRepository.GetAllAsync(ti => ti.Id == id);
+            var result = await _reviewRepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<ReviewResponceModel>>(todoItems);
+            var mapper = _mapper.Map<List<ReviewResponceModel>>(result);
+            return mapper;
         }
 
         public async Task<CreateReviewResponceModel> CreateAsync(CreateReviewModel createTodoItemModel,
             CancellationToken cancellationToken = default)
         {
             var todoItem = _mapper.Map<Review>(createTodoItemModel);
-
+            var res = await _reviewRepository.AddAsync(todoItem);
+            if (res == null) return null;
 
             return new CreateReviewResponceModel
             {
-                Id = (await _reviewRepository.AddAsync(todoItem)).Id
+                Id = res.Id
             };
         }
 

@@ -18,30 +18,32 @@ namespace Airways.Application.Services.Impl
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<AicraftResponceModel>> GetAllByListIdAsync(Guid id,
-            CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<AicraftResponceModel>> GetAllByListIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var todoItems = await _aicraftrepository.GetAllAsync(ti => ti.Airline.Id == id);
+            var todoItems = await _aicraftrepository.GetAllAsync( ti => ti.Id == id);
 
 
-            return _mapper.Map<IEnumerable<AicraftResponceModel>>(todoItems);
+            return (IEnumerable<AicraftResponceModel>)_mapper.Map<AicraftResponceModel>(todoItems);
         }
 
         public async Task<CreateAicraftResponceModel> CreateAsync(CreateAircraftModel createTodoItemModel,
             CancellationToken cancellationToken = default)
         {
             var todoItem = _mapper.Map<Aicraft>(createTodoItemModel);
+            var result = await _aicraftrepository.AddAsync(todoItem);
+
+            if (result == null) return null;
 
             return new CreateAicraftResponceModel
             {
-                Id = (await _aicraftrepository.AddAsync(todoItem)).Id
+                Id = result.Id
             };
         }
 
         public async Task<UpdateAicraftResponceModel> UpdateAsync(Guid id, UpdateAicraftModel updateTodoItemModel,
             CancellationToken cancellationToken = default)
         {
-            var todoItem = await _aicraftrepository.GetFirstAsync(ti => ti.Airline.Id == id);
+            var todoItem = await _aicraftrepository.GetFirstAsync(ti => ti.Id == id);
 
             _mapper.Map(updateTodoItemModel, todoItem);
 
@@ -59,6 +61,14 @@ namespace Airways.Application.Services.Impl
             {
                 Id = (await _aicraftrepository.DeleteAsync(todoItem)).Id
             };
+        }
+
+        public async Task<List<AicraftResponceModel>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await _aicraftrepository.GetAllAsync();
+
+            var mapper = _mapper.Map<List<AicraftResponceModel>>(result);
+            return mapper;
         }
     }
 }

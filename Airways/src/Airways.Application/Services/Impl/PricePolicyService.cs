@@ -1,7 +1,9 @@
 ﻿using Airways.Application.Models;
+using Airways.Application.Models.Aicraft;
 using Airways.Application.Models.PricePolycy;
 using Airways.Core.Entity;
 using Airways.DataAccess.Repository;
+using Airways.DataAccess.Repository.Impl;
 using AutoMapper;
 
 namespace Airways.Application.Services.Impl
@@ -19,12 +21,12 @@ namespace Airways.Application.Services.Impl
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<PricePolicyResponceModel>> GetAllByListIdAsync(Guid id,
-            CancellationToken cancellationToken = default)
+        public async Task<List<PricePolicyResponceModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var todoItems = await _pricepolicyRepository.GetAllAsync(ti => ti.Id == id);
+            var result = await _pricepolicyRepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<PricePolicyResponceModel>>(todoItems);
+            var mapper = _mapper.Map<List<PricePolicyResponceModel>>(result);
+            return mapper;
         }
 
         public async Task<CreatePricePolicyResponceModel> CreateAsync(CreatePricePolicyModel createTodoItemModel,
@@ -33,10 +35,12 @@ namespace Airways.Application.Services.Impl
             try
             {
                 var todoItem = _mapper.Map<PricePolicy>(createTodoItemModel);
+                var res = await _pricepolicyRepository.AddAsync(todoItem);
+                if (res == null) return null;
 
                 return new CreatePricePolicyResponceModel
                 {
-                    Id = (await _pricepolicyRepository.AddAsync(todoItem)).Id
+                    Id = res.Id
                 };
             }
             catch (Exception ex)

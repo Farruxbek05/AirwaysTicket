@@ -1,13 +1,12 @@
-﻿using Airways.Application.Models.Payment;
-using Airways.Application.Models;
+﻿using Airways.Application.Models;
+using Airways.Application.Models.Ticket;
 using Airways.Core.Entity;
 using Airways.DataAccess.Repository;
 using AutoMapper;
-using Airways.Application.Models.Ticket;
 
 namespace Airways.Application.Services.Impl
 {
-    public class TicketService:ITicketService
+    public class TicketService : ITicketService
     {
         private readonly IMapper _mapper;
         private readonly ITicketRepository _ticketRepository;
@@ -20,23 +19,24 @@ namespace Airways.Application.Services.Impl
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TicketResponceModel>> GetAllByListIdAsync(Guid id,
-            CancellationToken cancellationToken = default)
+        public async Task<List<TicketResponceModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var todoItems = await _ticketRepository.GetAllAsync(ti => ti.Id == id);
+            var result = await _ticketRepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<TicketResponceModel>>(todoItems);
+            var mapper = _mapper.Map<List<TicketResponceModel>>(result);
+            return mapper;
         }
 
         public async Task<CreateTicketResponceModel> CreateAsync(CreateTicketsModel createTodoItemModel,
             CancellationToken cancellationToken = default)
         {
             var todoItem = _mapper.Map<Tickets>(createTodoItemModel);
-
+            var res = await _ticketRepository.AddAsync(todoItem);
+            if (res == null) return null;
 
             return new CreateTicketResponceModel
             {
-                Id = (await _ticketRepository.AddAsync(todoItem)).Id
+                Id = res.Id
             };
         }
 

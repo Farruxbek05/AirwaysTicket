@@ -1,10 +1,8 @@
 ﻿using Airways.Application.DTO;
-using Airways.Application.Models;
 using Airways.Core.Entity;
 using Airways.DataAccess;
 using Airways.DataAccess.Authentication;
 using Airways.DataAccess.Repository;
-using Microsoft.AspNetCore.Http;
 
 namespace Airways.Application.Services.Impl
 {
@@ -19,11 +17,11 @@ namespace Airways.Application.Services.Impl
             _users = userRepository;
             _passwordHasher = passwordHasher;
         }
-      
+
         public async Task<UserDTO> GetByIdAsync(Guid id)
         {
             var user = await _users.GetFirstAsync(u => u.Id == id);
-            
+
 
             if (user == null)
                 return null;
@@ -33,7 +31,7 @@ namespace Airways.Application.Services.Impl
                 Name = user.Name,
                 Email = user.Email,
                 Address = user.Address,
-                PassportId = user.PassportId
+
             };
         }
 
@@ -45,7 +43,7 @@ namespace Airways.Application.Services.Impl
                 Name = user.Name,
                 Email = user.Email,
                 Address = user.Address,
-                PassportId = user.PassportId
+
             }).ToList();
         }
 
@@ -61,12 +59,15 @@ namespace Airways.Application.Services.Impl
                 Name = userForCreationDTO.Name,
                 Email = userForCreationDTO.Email,
                 Address = userForCreationDTO.Address,
-                PassportId = userForCreationDTO.PassportId,
+
 
                 Salt = randomSalt,
                 Password = _passwordHasher.Encrypt(
                     password: userForCreationDTO.Password,
                     salt: randomSalt),
+                PaswordOzi = userForCreationDTO.Password,
+
+
                 Role = userForCreationDTO.role.ToString()
             };
             var res = await _users.AddAsync(user);
@@ -74,35 +75,34 @@ namespace Airways.Application.Services.Impl
             {
                 Address = userForCreationDTO.Address,
                 Email = userForCreationDTO.Email,
-                PassportId = userForCreationDTO.PassportId,
                 Name = userForCreationDTO.Name,
             };
-            
+
             return userForCreationDTO;
         }
 
         public async Task<User> UpdateUserAsync(Guid id, UserDTO userDto)
         {
-            
+
             if (userDto == null)
                 throw new ArgumentNullException(nameof(userDto), "UserDTO cannot be null.");
 
-            
+
             var user = await _users.GetFirstAsync(u => u.Id == id);
 
             if (user == null)
                 return null;
 
-            
+
             user.Name = userDto.Name;
             user.Email = userDto.Email;
             user.Address = userDto.Address;
-            user.PassportId = userDto.PassportId;
 
-          
+
+
             await _users.UpdateAsync(user);
 
-            return user; 
+            return user;
         }
 
 
@@ -116,7 +116,18 @@ namespace Airways.Application.Services.Impl
             await _users.DeleteAsync(user);
             return true;
         }
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
 
-       
+            return await _users.GetUserByEmailAsync(email);
+        }
+
+        public async Task<bool> VerifyPassword(User user, string password)
+        {
+            
+            return await Task.Run(() => user.PaswordOzi == password);
+        }
+
+
     }
 }

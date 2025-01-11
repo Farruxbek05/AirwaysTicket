@@ -1,6 +1,8 @@
 ﻿using Airways.Application.Models;
+using Airways.Application.Models.Aicraft;
 using Airways.Application.Models.PricePolycy;
 using Airways.Application.Services;
+using Airways.Application.Services.Impl;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +17,13 @@ namespace Airways.API.Controllers
         public PricePolicyController(IPricePolicyService pricepolicyService)
         {
             _pricepolicyService = pricepolicyService;
+        }
+        [HttpGet]
+        public async Task<ActionResult<ApiResult<List<PricePolicyResponceModel>>>> GetAll()
+        {
+            var result = await _pricepolicyService.GetAllAsync();
+            var response = ApiResult<List<PricePolicyResponceModel>>.Success(result);
+            return Ok(response);
         }
 
         [HttpPost]

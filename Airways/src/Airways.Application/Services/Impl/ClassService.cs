@@ -1,13 +1,12 @@
-﻿using Airways.Application.Models.Airline;
-using Airways.Application.Models;
+﻿using Airways.Application.Models;
+using Airways.Application.Models.Classs;
 using Airways.Core.Entity;
 using Airways.DataAccess.Repository;
 using AutoMapper;
-using Airways.Application.Models.Classs;
 
 namespace Airways.Application.Services.Impl
 {
-    public class ClassService:IClassService
+    public class ClassService : IClassService
     {
         private readonly IMapper _mapper;
         private readonly IClassRepository _classRepository;
@@ -20,12 +19,12 @@ namespace Airways.Application.Services.Impl
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ClassResponceModel>> GetAllByListIdAsync(Guid id,
-            CancellationToken cancellationToken = default)
+        public async Task<List<ClassResponceModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var todoItems = await _classRepository.GetAllAsync(ti => ti.Id == id);
+            var result = await _classRepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<ClassResponceModel>>(todoItems);
+            var mapper = _mapper.Map<List<ClassResponceModel>>(result);
+            return mapper;
         }
 
         public async Task<CreateClassResponceModel> CreateAsync(CreateCLassModel createTodoItemModel,
@@ -33,10 +32,11 @@ namespace Airways.Application.Services.Impl
         {
             var todoItem = _mapper.Map<Class>(createTodoItemModel);
 
-
+            var res = await _classRepository.AddAsync(todoItem);
+            if (res == null) return null;
             return new CreateClassResponceModel
             {
-                Id = (await _classRepository.AddAsync(todoItem)).Id
+                Id = res.Id
             };
         }
 

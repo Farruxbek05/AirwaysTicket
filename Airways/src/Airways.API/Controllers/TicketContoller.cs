@@ -13,6 +13,13 @@ namespace Airways.API.Controllers
         {
             _ticketService = ticketService;
         }
+        [HttpGet]
+        public async Task<ActionResult<ApiResult<List<TicketResponceModel>>>> GetAll()
+        {
+            var result = await _ticketService.GetAllAsync();
+            var response = ApiResult<List<TicketResponceModel>>.Success(result);
+            return Ok(response);
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateTicketsModel createUserModel)

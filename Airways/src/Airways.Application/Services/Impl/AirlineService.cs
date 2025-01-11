@@ -6,11 +6,11 @@ using AutoMapper;
 
 namespace Airways.Application.Services.Impl
 {
-    public class AirlineService:IAirlineService
+    public class AirlineService : IAirlineService
     {
         private readonly IMapper _mapper;
         private readonly IAirlineRepository _airlineRepository;
-      
+
 
         public AirlineService(IAirlineRepository airlineRepository,
             IMapper mapper)
@@ -19,12 +19,12 @@ namespace Airways.Application.Services.Impl
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<AirlineResponceModel>> GetAllByListIdAsync(Guid id,
-            CancellationToken cancellationToken = default)
+        public async Task<List<AirlineResponceModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var todoItems = await _airlineRepository.GetAllAsync(ti => ti.Id == id);
+            var result = await _airlineRepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<AirlineResponceModel>>(todoItems);
+            var mapper = _mapper.Map<List<AirlineResponceModel>>(result);
+            return mapper;
         }
 
         public async Task<CreateAirlineResponceModel> CreateAsync(CreateAirlineModel createTodoItemModel,
@@ -60,6 +60,11 @@ namespace Airways.Application.Services.Impl
             {
                 Id = (await _airlineRepository.DeleteAsync(todoItem)).Id
             };
+        }
+
+        public Task<IEnumerable<AirlineResponceModel>> GetAllByListIdAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -8,8 +8,8 @@ namespace Airways.Core.Entity
         public string Name { get; set; }
         public string Country { get; set; }
         public Guid Code { get; set; }
-        public List<Aicraft> aicrafts=new List<Aicraft>();
-        public List<Reys> reys=new List<Reys>();
+        public ICollection<Aicraft>? aicrafts { get; set; }
+        public List<Reys>? reys { get; set; }
         public string? CreatedBy { get; set; }
 
         public DateTime? CreatedOn { get; set; }

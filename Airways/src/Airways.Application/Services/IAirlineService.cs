@@ -1,10 +1,12 @@
 ﻿using Airways.Application.Models;
+using Airways.Application.Models.Aicraft;
 using Airways.Application.Models.Airline;
 
 namespace Airways.Application.Services
 {
     public interface IAirlineService
     {
+        Task<List<AirlineResponceModel?>> GetAllAsync(CancellationToken cancellationToken = default);
         Task<CreateAirlineResponceModel> CreateAsync(CreateAirlineModel createTodoItemModel,
       CancellationToken cancellationToken = default);
 

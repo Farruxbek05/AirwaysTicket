@@ -9,9 +9,9 @@ namespace Airways.Core.Entity
         public string Description { get; set; }
         public string Model { get; set; }
         public int SeatCapacity { get; set; }
-        public  Airline Airline { get; set; }
-
-        public List<Reys> reys = new List<Reys>();
+        public Guid AirlineId { get; set; }
+        public Airline? Airline { get; set; }
+        public List<Reys>? reys { get; set; }
         public string? CreatedBy { get; set; }
 
         public DateTime? CreatedOn { get; set; }

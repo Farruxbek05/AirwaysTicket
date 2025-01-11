@@ -1,4 +1,5 @@
 ﻿using Airways.Application.Models;
+using Airways.Application.Models.Aicraft;
 using Airways.Application.Models.Payment;
 
 namespace Airways.Application.Services
@@ -10,8 +11,7 @@ namespace Airways.Application.Services
 
         Task<BaseResponceModel> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<PaymentResponceModel>>
-            GetAllByListIdAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<List<PaymentResponceModel>> GetAllAsync(CancellationToken cancellationToken = default);
 
         Task<UpdatePaymentResponceModel> UpdateAsync(Guid id, UpdatePaymentModel updateTodoItemModel,
             CancellationToken cancellationToken = default);

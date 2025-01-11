@@ -1,6 +1,8 @@
 ﻿using Airways.Application.Models;
+using Airways.Application.Models.Aicraft;
 using Airways.Application.Models.Payment;
 using Airways.Application.Services;
+using Airways.Application.Services.Impl;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airways.API.Controllers
@@ -12,6 +14,13 @@ namespace Airways.API.Controllers
         public PaymentController(IPaymentService paymentService)
         {
             _paymentService = paymentService;
+        }
+        [HttpGet]
+        public async Task<ActionResult<ApiResult<List<PaymentResponceModel>>>> GetAll()
+        {
+            var result = await _paymentService.GetAllAsync();
+            var response = ApiResult<List<PaymentResponceModel>>.Success(result);
+            return Ok(response);
         }
 
         [HttpPost]

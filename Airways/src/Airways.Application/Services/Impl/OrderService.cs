@@ -4,6 +4,9 @@ using Airways.Core.Entity;
 using Airways.DataAccess.Repository;
 using AutoMapper;
 using Airways.Application.Models.Order;
+using Airways.Application.Models.Aicraft;
+using Airways.DataAccess.Repository.Impl;
+using Airways.Application.Models.Classs;
 
 namespace Airways.Application.Services.Impl
 {
@@ -20,12 +23,12 @@ namespace Airways.Application.Services.Impl
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<OrderResponceModel>> GetAllByListIdAsync(Guid id,
-            CancellationToken cancellationToken = default)
+        public async Task<List<OrderResponceModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var todoItems = await _orderRepository.GetAllAsync(ti => ti.Id == id);
+            var result = await _orderRepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<OrderResponceModel>>(todoItems);
+            var mapper = _mapper.Map<List<OrderResponceModel>>(result);
+            return mapper;
         }
 
         public async Task<CreateOrderResponceModel> CreateAsync(CreateOrderModel createTodoItemModel,
@@ -33,10 +36,12 @@ namespace Airways.Application.Services.Impl
         {
             var todoItem = _mapper.Map<Order>(createTodoItemModel);
 
+            var res = await _orderRepository.AddAsync(todoItem);
+            if (res == null) return null;
 
             return new CreateOrderResponceModel
             {
-                Id = (await _orderRepository.AddAsync(todoItem)).Id
+                Id = res.Id
             };
         }
 
@@ -46,10 +51,11 @@ namespace Airways.Application.Services.Impl
             var todoItem = await _orderRepository.GetFirstAsync(ti => ti.Id == id);
 
             _mapper.Map(updateTodoItemModel, todoItem);
-
+            var responce = await _orderRepository.UpdateAsync(todoItem);
+            if (responce == null) return null;
             return new UpdateOrderResponceModel
             {
-                Id = (await _orderRepository.UpdateAsync(todoItem)).Id
+                Id = responce.Id
             };
         }
 

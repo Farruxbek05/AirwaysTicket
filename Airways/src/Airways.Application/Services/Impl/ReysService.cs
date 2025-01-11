@@ -4,6 +4,7 @@ using Airways.Core.Entity;
 using Airways.DataAccess.Repository;
 using AutoMapper;
 using Airways.Application.Models.Reys;
+using Airways.DataAccess.Repository.Impl;
 
 namespace Airways.Application.Services.Impl
 {
@@ -19,22 +20,23 @@ namespace Airways.Application.Services.Impl
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ReysResponceModel>> GetAllByListIdAsync(Guid id,
-            CancellationToken cancellationToken = default)
+        public async Task<List<ReysResponceModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var todoItems = await _reysrepository.GetAllAsync(ti => ti.Id == id);
+            var result = await _reysrepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<ReysResponceModel>>(todoItems);
+            var mapper = _mapper.Map<List<ReysResponceModel>>(result);
+            return mapper;
         }
 
         public async Task<CreateReysResponceModel> CreateAsync(CreateReysModel createTodoItemModel,
             CancellationToken cancellationToken = default)
         {
             var todoItem = _mapper.Map<Reys>(createTodoItemModel);
-
+            var res = await _reysrepository.AddAsync(todoItem);
+            if (res == null) return null;
             return new CreateReysResponceModel
             {
-                Id = (await _reysrepository.AddAsync(todoItem)).Id
+                Id = res.Id
             };
         }
 

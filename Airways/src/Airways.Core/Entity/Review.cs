@@ -7,7 +7,9 @@ namespace Airways.Core.Entity
       
         public int Rating { get; set; }
         public string Comment { get; set; }
+        public Guid UserId { get; set; }
         public User User { get; set; }
+        public Guid ReysId { get; set; }
         public  Reys Reys { get; set; }
         public string? CreatedBy { get; set; }
 

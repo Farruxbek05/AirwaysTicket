@@ -11,7 +11,9 @@ namespace Airways.Core.Entity
         public DateTime ScheduledDepartureTime { get; set; }
         public DateTime ActualDepartureTime { get; set; }
         public DateTime ScheduledArrivalTime { get; set; }
+        public Guid AirlineId { get; set; }
         public  Airline Airline { get; set; }
+        public Guid AicraftId { get; set; }
         public  Aicraft Aicraft { get; set; }
         public List<Review> review=new List<Review>();
         public List<Tickets> tickets = new List<Tickets>();

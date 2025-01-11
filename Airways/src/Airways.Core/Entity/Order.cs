@@ -6,7 +6,9 @@ namespace Airways.Core.Entity
     {
         
         public decimal TotalPrice { get; set; }
+        public Guid UserId { get; set; }
         public  User User { get; set; }
+        public Guid TicketsId { get; set; }
         public  Tickets Tickets { get; set; }
         public  List<Payment> payment = new List<Payment>();
         public string?  CreatedBy { get; set; }

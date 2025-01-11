@@ -11,12 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers(
     config => config.Filters.Add(typeof(ValidateModelAttribute))
 );
-
-
 builder.Services.AddSwagger();
-
-
-
 builder.Services.AddDataAccess(builder.Configuration)
    .AddApplication(builder.Environment);
 

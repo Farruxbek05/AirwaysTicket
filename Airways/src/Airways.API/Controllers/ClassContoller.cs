@@ -1,6 +1,8 @@
 ﻿using Airways.Application.Models;
+using Airways.Application.Models.Aicraft;
 using Airways.Application.Models.Classs;
 using Airways.Application.Services;
+using Airways.Application.Services.Impl;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airways.API.Controllers
@@ -12,6 +14,13 @@ namespace Airways.API.Controllers
         public ClassContoller(IClassService classService)
         {
             _classService = classService;
+        }
+        [HttpGet]
+        public async Task<ActionResult<ApiResult<List<ClassResponceModel>>>> GetAll()
+        {
+            var result = await _classService.GetAllAsync();
+            var response = ApiResult<List<ClassResponceModel>>.Success(result);
+            return Ok(response);
         }
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateCLassModel createUserModel)

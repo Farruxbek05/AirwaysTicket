@@ -10,7 +10,7 @@ public class CreateAircraftModel
     public string Description { get; set; }
     public string Model { get; set; }
     public int SeatCapacity { get; set; }
-    public Guid Airline_id { get; set; }
+    public Guid AirlineId { get; set; }
 
 }
     public class CreateAicraftResponceModel : BaseResponceModel { }

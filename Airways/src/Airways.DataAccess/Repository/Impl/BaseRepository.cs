@@ -8,58 +8,86 @@ namespace Airways.DataAccess.Repository.Impl
 {
     public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
     {
-        protected readonly DataBaseContext Context;
-        protected readonly DbSet<TEntity> DbSet;
+        protected readonly DataBaseContext _context;
+        protected readonly DbSet<TEntity> _dbset;
 
         protected BaseRepository(DataBaseContext context)
         {
-            Context = context;
-            DbSet = context.Set<TEntity>();
+            _context = context;
+            _dbset = context.Set<TEntity>();
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public async Task<TEntity?> AddAsync(TEntity entity)
         {
-            var addedEntity = (await DbSet.AddAsync(entity)).Entity;
-            await Context.SaveChangesAsync();
+            try
+            {
+                var addedEntity = (await _dbset.AddAsync(entity)).Entity;
+                await _context.SaveChangesAsync();
 
-            return addedEntity;
+                return addedEntity;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
-        public async Task<TEntity> DeleteAsync(TEntity entity)
+        public async Task<TEntity?> DeleteAsync(TEntity entity)
         {
-            var removedEntity = DbSet.Remove(entity).Entity;
-            await Context.SaveChangesAsync();
+            try
+            {
+                var removedEntity = _dbset.Remove(entity).Entity;
+                await _context.SaveChangesAsync();
+                return removedEntity;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
 
-            return removedEntity;
         }
 
         public IEnumerable<TEntity> GetAllAsEnumurable()
         {
-            return DbSet.AsEnumerable();
+            return _dbset.AsEnumerable();
         }
 
         public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await DbSet.Where(predicate).ToListAsync();
+            return await _dbset.Where(predicate).ToListAsync();
         }
         public IQueryable<TEntity> GetAll() =>
-            DbSet.AsQueryable();
+            _dbset.AsQueryable();
 
         public async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            var entity = await DbSet.Where(predicate).FirstOrDefaultAsync();
+            var entity = await _dbset.Where(predicate).FirstOrDefaultAsync();
 
             if (entity == null) throw new ResourceNotFound(typeof(TEntity));
 
-            return await DbSet.Where(predicate).FirstOrDefaultAsync();
+            return await _dbset.Where(predicate).FirstOrDefaultAsync();
         }
 
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            DbSet.Update(entity);
-            await Context.SaveChangesAsync();
+            _dbset.Update(entity);
+            await _context.SaveChangesAsync();
 
             return entity;
+        }
+
+        public async Task<List<TEntity>?> GetAllAsync()
+        {
+            try
+            {
+
+                var result = await _dbset.ToListAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 

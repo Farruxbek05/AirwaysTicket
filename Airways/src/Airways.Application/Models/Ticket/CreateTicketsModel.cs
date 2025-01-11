@@ -11,10 +11,10 @@ public class CreateTicketsModel
     DateTime OrderTime { get; set; }
     public int SeatNumber { get; set; }
     Status status { get; set; }
-    public Guid Reys_id { get; set; }
-    public Guid User_id { get; set; }
-    public Guid Cllass_id { get; set; }
-    public Guid PricePolicy_id { get; set; }
+    public Guid ReysId { get; set; }
+    public Guid UserId { get; set; }
+    public Guid ClassId { get; set; }
+ 
 
 }
 public class CreateTicketResponceModel : BaseResponceModel { }

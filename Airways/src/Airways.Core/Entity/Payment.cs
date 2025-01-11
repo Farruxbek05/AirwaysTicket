@@ -8,7 +8,9 @@ namespace Airways.Core.Entity
         public decimal Amount { get; set; }
         public PayStatus payStatus { get; set; }
         public CardType paymentType { get; set; }
+        public Guid UserId { get; set; }
         public User User { get; set; }
+        public Guid OrderId { get; set; }
         public Order Order { get; set; }
         public string? CreatedBy { get; set; }
 

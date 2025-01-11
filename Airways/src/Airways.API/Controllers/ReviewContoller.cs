@@ -1,6 +1,8 @@
 ﻿using Airways.Application.Models;
+using Airways.Application.Models.Aicraft;
 using Airways.Application.Models.Review;
 using Airways.Application.Services;
+using Airways.Application.Services.Impl;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airways.API.Controllers
@@ -12,6 +14,13 @@ namespace Airways.API.Controllers
         public ReviewContoller(IReviewservice reviewService)
         {
             _reviewService = reviewService;
+        }
+        [HttpGet]
+        public async Task<ActionResult<ApiResult<List<ReviewResponceModel>>>> GetAll()
+        {
+            var result = await _reviewService.GetAllAsync();
+            var response = ApiResult<List<ReviewResponceModel>>.Success(result);
+            return Ok(response);
         }
 
         [HttpPost]

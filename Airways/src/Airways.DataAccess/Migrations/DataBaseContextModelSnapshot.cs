@@ -88,7 +88,8 @@ namespace Airways.DataAccess.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
@@ -353,8 +354,8 @@ namespace Airways.DataAccess.Migrations
                     b.Property<decimal>("MaxWeight")
                         .HasColumnType("numeric");
 
-                    b.Property<Guid>("PricePolicyId")
-                        .HasColumnType("uuid");
+                    b.Property<DateTime>("OrderTime")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ReysId")
                         .HasColumnType("uuid");
@@ -374,11 +375,12 @@ namespace Airways.DataAccess.Migrations
                     b.Property<double>("price")
                         .HasColumnType("double precision");
 
+                    b.Property<int>("status")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClassId");
-
-                    b.HasIndex("PricePolicyId");
 
                     b.HasIndex("ReysId");
 
@@ -411,11 +413,11 @@ namespace Airways.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PassportId")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PaswordOzi")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -641,9 +643,9 @@ namespace Airways.DataAccess.Migrations
             modelBuilder.Entity("Airways.Core.Entity.Aicraft", b =>
                 {
                     b.HasOne("Airways.Core.Entity.Airline", "Airline")
-                        .WithMany()
+                        .WithMany("aicrafts")
                         .HasForeignKey("AirlineId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Airline");
@@ -709,13 +711,13 @@ namespace Airways.DataAccess.Migrations
             modelBuilder.Entity("Airways.Core.Entity.Reys", b =>
                 {
                     b.HasOne("Airways.Core.Entity.Aicraft", "Aicraft")
-                        .WithMany()
+                        .WithMany("reys")
                         .HasForeignKey("AicraftId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Airways.Core.Entity.Airline", "Airline")
-                        .WithMany()
+                        .WithMany("reys")
                         .HasForeignKey("AirlineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -733,12 +735,6 @@ namespace Airways.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Airways.Core.Entity.PricePolicy", "PricePolicy")
-                        .WithMany()
-                        .HasForeignKey("PricePolicyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Airways.Core.Entity.Reys", "Reys")
                         .WithMany()
                         .HasForeignKey("ReysId")
@@ -752,8 +748,6 @@ namespace Airways.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Class");
-
-                    b.Navigation("PricePolicy");
 
                     b.Navigation("Reys");
 
@@ -809,6 +803,18 @@ namespace Airways.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Airways.Core.Entity.Aicraft", b =>
+                {
+                    b.Navigation("reys");
+                });
+
+            modelBuilder.Entity("Airways.Core.Entity.Airline", b =>
+                {
+                    b.Navigation("aicrafts");
+
+                    b.Navigation("reys");
                 });
 #pragma warning restore 612, 618
         }

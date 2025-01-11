@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Airways.API.Controllers
 {
-
     public class AicraftController : ApiController
     {
         private readonly IAircraftService _aicraftService;
@@ -17,11 +16,21 @@ namespace Airways.API.Controllers
             _aicraftService = aicraftService;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<ApiResult<List<AicraftResponceModel>>>> GetAll()
+        {
+            var result = await _aicraftService.GetAllAsync();
+            var response = ApiResult<List<AicraftResponceModel>>.Success(result);
+            return Ok(response);
+        }
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateAircraftModel createUserModel)
         {
-            return Ok(ApiResult<CreateAicraftResponceModel>.Success(
-                await _aicraftService.CreateAsync(createUserModel)));
+            var result = await _aicraftService.CreateAsync(createUserModel);
+
+            if (result == null) return BadRequest(ApiResult<CreateAicraftResponceModel>.Failure());
+
+            return Ok(ApiResult<CreateAicraftResponceModel>.Success(result));
         }
 
         [HttpPut("{id:guid}")]

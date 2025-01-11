@@ -87,6 +87,43 @@ namespace Airways.API.Controllers
                     User = createUser
                 });
             }
+
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+        [HttpPost("LoginUser")]
+        public async Task<IActionResult> LoginUser(UserForLoginDTO userForLoginDTO)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+               
+                var user = await _userService.GetUserByEmailAsync(userForLoginDTO.Email);
+
+                if (user == null)
+                    return Unauthorized(new { Message = "Foydalanuvchi topilmadi!" });
+
+                
+                bool isPasswordValid = await _userService.VerifyPassword(user, userForLoginDTO.Password);
+
+                if (!isPasswordValid)
+                    return Unauthorized(new { Message = "Email Yoki Parol Hato !!!" });
+               
+               
+                var accessToken = _jwtTokenHandler.GenerateAccesToken(user);
+                var refreshToken = _jwtTokenHandler.GenerateRefreshToken();
+
+                return Ok(new
+                {
+                    AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
+                    RefreshToken = refreshToken,
+                    User = user
+                });
+            }
             catch (Exception ex)
             {
                 return BadRequest(new { Message = ex.Message });
@@ -103,6 +140,7 @@ namespace Airways.API.Controllers
             var res = await _userService.UpdateUserAsync(id, userDTO);
             return res == null ? NotFound() : Ok(res);
         }
+        
         [HttpPut("Delete/{ID}")]
         public async Task<IActionResult> DeleteUser([FromRoute] Guid ID)
         {

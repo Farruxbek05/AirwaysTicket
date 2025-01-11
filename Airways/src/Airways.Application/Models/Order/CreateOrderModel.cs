@@ -6,7 +6,7 @@ public class CreateOrderModel
 {
     
     public decimal TotalPrice { get; set; }
-    public Guid User_id { get; set; }
-    public Guid Ticked_id { get; set; }
+    public Guid UserId { get; set; }
+    public Guid TicketsId { get; set; }
 }
 public class CreateOrderResponceModel : BaseResponceModel { }

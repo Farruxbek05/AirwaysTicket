@@ -11,8 +11,8 @@ namespace Airways.Application.Models.Reys
         public DateTime ScheduledDepartureTime { get; set; }
         public DateTime ActualDepartureTime { get; set; }
         public DateTime ScheduledArrivalTime { get; set; }
-        public Guid Airline_id { get; set; }
-        public Guid aAircraft_id { get; set; }
+        public Guid AirlineId { get; set; }
+        public Guid AicraftId { get; set; }
     }
     public class UpdateReysResponceModel : BaseResponceModel { }
 
