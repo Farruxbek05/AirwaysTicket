@@ -108,6 +108,9 @@ namespace Airways.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("ClassType")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -119,9 +122,6 @@ namespace Airways.DataAccess.Migrations
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("className")
-                        .HasColumnType("integer");
 
                     b.Property<string>("description")
                         .IsRequired()
@@ -299,6 +299,9 @@ namespace Airways.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("ClassType")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -314,9 +317,6 @@ namespace Airways.DataAccess.Migrations
 
                     b.Property<DateTime>("ScheduledDepartureTime")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("TicketCount")
-                        .HasColumnType("integer");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
@@ -339,11 +339,9 @@ namespace Airways.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<decimal>("AdditionalCharge")
-                        .HasColumnType("numeric");
-
-                    b.Property<Guid>("ClassId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ArrivalCity")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
@@ -351,16 +349,28 @@ namespace Airways.DataAccess.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<decimal>("MaxWeight")
-                        .HasColumnType("numeric");
+                    b.Property<string>("DepartureCity")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<DateTime>("OrderTime")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<string>("PassengerName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("PaymentId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("ReysId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("SeatNumber")
+                    b.Property<DateTime>("ScheduledDepartureTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("SeatNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.Property<string>("UpdatedBy")
@@ -369,22 +379,11 @@ namespace Airways.DataAccess.Migrations
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("price")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("status")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ClassId");
+                    b.HasIndex("PaymentId");
 
                     b.HasIndex("ReysId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Tickets");
                 });
@@ -417,9 +416,12 @@ namespace Airways.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PaswordOzi")
+                    b.Property<string>("Pasword2")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("ReysId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -436,6 +438,8 @@ namespace Airways.DataAccess.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReysId");
 
                     b.ToTable("AirwaysUser");
                 });
@@ -729,11 +733,9 @@ namespace Airways.DataAccess.Migrations
 
             modelBuilder.Entity("Airways.Core.Entity.Tickets", b =>
                 {
-                    b.HasOne("Airways.Core.Entity.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Airways.Core.Entity.Payment", null)
+                        .WithMany("Tickets")
+                        .HasForeignKey("PaymentId");
 
                     b.HasOne("Airways.Core.Entity.Reys", "Reys")
                         .WithMany()
@@ -741,17 +743,14 @@ namespace Airways.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Airways.Core.Entity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
-
                     b.Navigation("Reys");
+                });
 
-                    b.Navigation("User");
+            modelBuilder.Entity("Airways.Core.Entity.User", b =>
+                {
+                    b.HasOne("Airways.Core.Entity.Reys", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ReysId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -815,6 +814,16 @@ namespace Airways.DataAccess.Migrations
                     b.Navigation("aicrafts");
 
                     b.Navigation("reys");
+                });
+
+            modelBuilder.Entity("Airways.Core.Entity.Payment", b =>
+                {
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("Airways.Core.Entity.Reys", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -18,6 +18,7 @@ namespace Airways.API.Controllers
         {
             _pricepolicyService = pricepolicyService;
         }
+
         [HttpGet]
         public async Task<ActionResult<ApiResult<List<PricePolicyResponceModel>>>> GetAll()
         {
@@ -25,7 +26,7 @@ namespace Airways.API.Controllers
             var response = ApiResult<List<PricePolicyResponceModel>>.Success(result);
             return Ok(response);
         }
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreatePricePolicyModel createUserModel)
         {

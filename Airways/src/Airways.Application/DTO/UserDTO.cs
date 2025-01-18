@@ -1,9 +1,10 @@
-﻿using Airways.DataAccess.Authentication;
+﻿using Airways.Core.Common;
+using Airways.DataAccess.Authentication;
 using Microsoft.AspNetCore.Http;
 
 namespace Airways.Application.DTO
 {
-    public class UserDTO
+    public class UserDTO : BaseEntity
     {
     
         public required string Name { get; set; }

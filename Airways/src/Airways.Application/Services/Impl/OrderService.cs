@@ -1,12 +1,10 @@
-﻿using Airways.Application.Models.Airline;
+﻿using Airways.Application.DTO;
 using Airways.Application.Models;
-using Airways.Core.Entity;
+using Airways.Application.Models.Order;
 using Airways.DataAccess.Repository;
 using AutoMapper;
-using Airways.Application.Models.Order;
-using Airways.Application.Models.Aicraft;
-using Airways.DataAccess.Repository.Impl;
-using Airways.Application.Models.Classs;
+using Newtonsoft.Json;
+using StackExchange.Redis;
 
 namespace Airways.Application.Services.Impl
 {
@@ -14,13 +12,14 @@ namespace Airways.Application.Services.Impl
     {
         private readonly IMapper _mapper;
         private readonly IOrderRepository _orderRepository;
-
+        private readonly IConnectionMultiplexer _redis;
 
         public OrderService(IOrderRepository orderRepository,
-            IMapper mapper)
+            IMapper mapper, IConnectionMultiplexer redis)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
+            _redis = redis;
         }
 
         public async Task<List<OrderResponceModel>> GetAllAsync(CancellationToken cancellationToken = default)
@@ -34,14 +33,25 @@ namespace Airways.Application.Services.Impl
         public async Task<CreateOrderResponceModel> CreateAsync(CreateOrderModel createTodoItemModel,
             CancellationToken cancellationToken = default)
         {
-            var todoItem = _mapper.Map<Order>(createTodoItemModel);
+            var todoItem = _mapper.Map<Core.Entity.Order>(createTodoItemModel);
 
             var res = await _orderRepository.AddAsync(todoItem);
+
             if (res == null) return null;
+
+            var db = _redis.GetDatabase();
+
+            var id = Guid.NewGuid();
+
+            var data = new RedisValues(id);
+
+            var jsonData = JsonConvert.SerializeObject(data);
+
+            db.StringSet(id.ToString(), jsonData);
 
             return new CreateOrderResponceModel
             {
-                Id = res.Id
+                Id = Guid.Parse(id.ToString())
             };
         }
 
@@ -68,5 +78,7 @@ namespace Airways.Application.Services.Impl
                 Id = (await _orderRepository.DeleteAsync(todoItem)).Id
             };
         }
+
+
     }
 }

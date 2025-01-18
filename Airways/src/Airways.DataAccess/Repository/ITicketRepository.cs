@@ -2,6 +2,13 @@
 
 namespace Airways.DataAccess.Repository
 {
-    public interface ITicketRepository : IBaseRepository<Tickets> { }
-  
+    public interface ITicketRepository : IBaseRepository<Tickets> 
+    {
+        public Tickets GetTicketById(Guid ticketId);
+       
+        Task<Tickets?> GetTicketByIdAsync(Guid? ticketId);
+        
+
+    }
+
 }

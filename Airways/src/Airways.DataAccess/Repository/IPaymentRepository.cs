@@ -2,5 +2,9 @@
 
 namespace Airways.DataAccess.Repository;
 
-    public interface IPaymentRepository : IBaseRepository<Payment> { }
+    public interface IPaymentRepository : IBaseRepository<Payment> 
+{
+    
+
+}
     

@@ -1,8 +1,7 @@
-﻿using Airways.Application.Models;
-using Airways.Application.Models.Aicraft;
+﻿using Airways.Application.DTO;
+using Airways.Application.Models;
 using Airways.Application.Models.Reys;
 using Airways.Application.Services;
-using Airways.Application.Services.Impl;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Airways.API.Controllers
@@ -26,8 +25,9 @@ namespace Airways.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CreateReysModel createUserModel)
         {
-            return Ok(ApiResult<CreateReysResponceModel>.Success(
-                await _reysService.CreateAsync(createUserModel)));
+            var result = await _reysService.CreateAsync(createUserModel);
+            return Ok(ApiResult<CreateReysResponceModel>.Success(result));
+
         }
 
         [HttpPut("{id:guid}")]

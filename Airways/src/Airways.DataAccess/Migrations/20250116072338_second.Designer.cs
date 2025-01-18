@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Airways.DataAccess.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20250110140423_assa")]
-    partial class assa
+    [Migration("20250116072338_second")]
+    partial class second
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,6 +111,9 @@ namespace Airways.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("ClassType")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -122,9 +125,6 @@ namespace Airways.DataAccess.Migrations
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("className")
-                        .HasColumnType("integer");
 
                     b.Property<string>("description")
                         .IsRequired()
@@ -302,6 +302,9 @@ namespace Airways.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("ClassType")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
@@ -317,9 +320,6 @@ namespace Airways.DataAccess.Migrations
 
                     b.Property<DateTime>("ScheduledDepartureTime")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("TicketCount")
-                        .HasColumnType("integer");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("text");
@@ -348,22 +348,34 @@ namespace Airways.DataAccess.Migrations
                     b.Property<Guid>("ClassId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("ClassType")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<decimal>("MaxWeight")
+                    b.Property<decimal>("MaxCharge")
                         .HasColumnType("numeric");
 
                     b.Property<DateTime>("OrderTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ReservationExpiresOn")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ReysId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("SeatNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.Property<string>("UpdatedBy")
@@ -375,15 +387,11 @@ namespace Airways.DataAccess.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.Property<double>("price")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("status")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ClassId");
+
+                    b.HasIndex("PaymentId");
 
                     b.HasIndex("ReysId");
 
@@ -420,9 +428,12 @@ namespace Airways.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("PaswordOzi")
+                    b.Property<string>("Pasword2")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Guid?>("ReysId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -439,6 +450,8 @@ namespace Airways.DataAccess.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReysId");
 
                     b.ToTable("AirwaysUser");
                 });
@@ -738,6 +751,12 @@ namespace Airways.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Airways.Core.Entity.Payment", "Payment")
+                        .WithMany("Tickets")
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Airways.Core.Entity.Reys", "Reys")
                         .WithMany()
                         .HasForeignKey("ReysId")
@@ -752,9 +771,18 @@ namespace Airways.DataAccess.Migrations
 
                     b.Navigation("Class");
 
+                    b.Navigation("Payment");
+
                     b.Navigation("Reys");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Airways.Core.Entity.User", b =>
+                {
+                    b.HasOne("Airways.Core.Entity.Reys", null)
+                        .WithMany("Users")
+                        .HasForeignKey("ReysId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -818,6 +846,16 @@ namespace Airways.DataAccess.Migrations
                     b.Navigation("aicrafts");
 
                     b.Navigation("reys");
+                });
+
+            modelBuilder.Entity("Airways.Core.Entity.Payment", b =>
+                {
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("Airways.Core.Entity.Reys", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

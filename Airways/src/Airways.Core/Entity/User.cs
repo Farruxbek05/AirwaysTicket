@@ -10,13 +10,10 @@ namespace Airways.Core.Entity
         public string Password { get; set; }
         public string Role { get; set; }
         public string Salt { get; set; } 
-        public string PaswordOzi { get; set; }
+        public string Pasword2 { get; set; }
         public string? CreatedBy { get; set; }
-
         public DateTime? CreatedOn { get; set; }
-
         public string? UpdatedBy { get; set; }
-
         public DateTime? UpdatedOn { get; set; }
     }
 }

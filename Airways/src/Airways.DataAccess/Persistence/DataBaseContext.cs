@@ -19,9 +19,6 @@ public class DataBaseContext : IdentityDbContext<ApplicationUser>
         AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
     }
 
-    
-    
-
     public DbSet<Aicraft> Aicrafts { get; set; }
     public DbSet<Airline> Airlines { get; set; }
     public DbSet<Class> Classes { get; set; }

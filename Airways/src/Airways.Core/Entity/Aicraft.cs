@@ -4,7 +4,6 @@ namespace Airways.Core.Entity
 {
     public class Aicraft:BaseEntity,IAuditedEntity
     {
-       
         public string Name { get; set; }
         public string Description { get; set; }
         public string Model { get; set; }
@@ -13,11 +12,8 @@ namespace Airways.Core.Entity
         public Airline? Airline { get; set; }
         public List<Reys>? reys { get; set; }
         public string? CreatedBy { get; set; }
-
         public DateTime? CreatedOn { get; set; }
-
         public string? UpdatedBy { get; set; }
-
         public DateTime? UpdatedOn { get; set; }
     }
 }

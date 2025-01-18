@@ -9,13 +9,15 @@ namespace Airways.Application.Services.Impl
     public class UserService : IUserService
     {
         private readonly IUserRepository _users;
+        private readonly IEmailService _emailService;
 
         private readonly IPasswordHasher _passwordHasher;
         public UserService(IUserRepository userRepository,
-            IPasswordHasher passwordHasher)
+            IPasswordHasher passwordHasher, IEmailService emailService)
         {
             _users = userRepository;
             _passwordHasher = passwordHasher;
+            _emailService = emailService;
         }
 
         public async Task<UserDTO> GetByIdAsync(Guid id)
@@ -43,8 +45,9 @@ namespace Airways.Application.Services.Impl
                 Name = user.Name,
                 Email = user.Email,
                 Address = user.Address,
-
+                Id = user.Id
             }).ToList();
+            
         }
 
         public async Task<UserForCreationDTO> AddUserAsync(UserForCreationDTO userForCreationDTO)
@@ -65,7 +68,7 @@ namespace Airways.Application.Services.Impl
                 Password = _passwordHasher.Encrypt(
                     password: userForCreationDTO.Password,
                     salt: randomSalt),
-                PaswordOzi = userForCreationDTO.Password,
+                Pasword2 = userForCreationDTO.Password,
 
 
                 Role = userForCreationDTO.role.ToString()
@@ -77,6 +80,7 @@ namespace Airways.Application.Services.Impl
                 Email = userForCreationDTO.Email,
                 Name = userForCreationDTO.Name,
             };
+           await _emailService.SendEmailAsync(user);
 
             return userForCreationDTO;
         }
@@ -93,15 +97,10 @@ namespace Airways.Application.Services.Impl
             if (user == null)
                 return null;
 
-
             user.Name = userDto.Name;
             user.Email = userDto.Email;
             user.Address = userDto.Address;
-
-
-
             await _users.UpdateAsync(user);
-
             return user;
         }
 
@@ -124,8 +123,8 @@ namespace Airways.Application.Services.Impl
 
         public async Task<bool> VerifyPassword(User user, string password)
         {
-            
-            return await Task.Run(() => user.PaswordOzi == password);
+
+            return await Task.Run(() => user.Pasword2 == password);
         }
 
 

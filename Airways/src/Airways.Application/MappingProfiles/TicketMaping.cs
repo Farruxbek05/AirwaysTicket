@@ -12,6 +12,7 @@ namespace Airways.Application.MappingProfiles
             CreateMap<UpdateTicketModel, Tickets>().ReverseMap();
 
             CreateMap<Tickets, TicketResponceModel>();
+            CreateMap<Tickets, CreateTicketResponceModel>().ReverseMap();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Airways.Application.Models;
 using Airways.Application.Models.Aicraft;
 using Airways.Application.Models.Ticket;
+using Airways.Core.Entity;
 
 namespace Airways.Application.Services
 {
@@ -15,5 +16,8 @@ namespace Airways.Application.Services
 
         Task<UpdateTicketResponceModel> UpdateAsync(Guid id, UpdateTicketModel updateTodoItemModel,
             CancellationToken cancellationToken = default);
+        Task<Tickets> GetTicketByIdAsync(Guid ticketId);
+        Task<byte[]> GenerateTicketImageAsync(Guid ticketId);
+        Task<byte[]> GenerateTicketImage(string passengerName, string departureCity, string arrivalCity, DateTime scheduledDepartureTime, string seatNumber);
     }
 }

@@ -19,7 +19,6 @@ namespace Airways.DataAccess.Authentication
                 return Convert.ToBase64String(algorithm.GetBytes(KeySize));
             }
         }
-
         public bool Verify(string hash, string password, string salt)
         {
             return Encrypt(password, salt).SequenceEqual(hash);

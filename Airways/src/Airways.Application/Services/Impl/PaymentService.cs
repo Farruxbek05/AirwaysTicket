@@ -1,11 +1,8 @@
 ﻿using Airways.Application.Models;
-using Airways.Application.Models.Classs;
 using Airways.Application.Models.Payment;
 using Airways.Core.Entity;
 using Airways.DataAccess.Repository;
-using Airways.DataAccess.Repository.Impl;
 using AutoMapper;
-
 namespace Airways.Application.Services.Impl
 {
     public class PaymentService : IPaymentService

@@ -42,11 +42,12 @@ namespace Airways.Application
             services.AddScoped<ITemplateService, TemplateService>();
             services.AddScoped<IClaimService, ClaimService>();
 
-
+            services.AddScoped<IEmailService, EmailService>();
+/*
             if (env.IsDevelopment())
-                services.AddScoped<IEmailService, DevEmailService>();
-            else
                 services.AddScoped<IEmailService, EmailService>();
+            else
+                services.AddScoped<IEmailService, EmailService>();*/
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)
@@ -57,11 +58,6 @@ namespace Airways.Application
         private static void RegisterCashing(this IServiceCollection services)
         {
             services.AddMemoryCache();
-        }
-
-        public static void AddEmailConfiguration(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddSingleton(configuration.GetSection("SmtpSettings").Get<SmtpSettings>());
         }
     }
 

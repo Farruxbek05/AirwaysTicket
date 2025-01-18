@@ -1,6 +1,8 @@
 ﻿using Airways.Application.Models;
+using Airways.Core.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Linq;
 
 namespace Airways.API.Filters;
 
@@ -12,9 +14,9 @@ public class ValidateModelAttribute : Attribute, IAsyncResultFilter
         {
             var errors = context.ModelState.Values
                 .SelectMany(modelState => modelState.Errors)
-                .Select(modelError => modelError.ErrorMessage);
+                .Select(modelError => Error.InternalServerError); // Convert to Error type
 
-            context.Result = new BadRequestObjectResult(ApiResult<string>.Failure(errors));
+            context.Result = new BadRequestObjectResult(ApiResult<string>.Failure(errors.First())); // Use context.Result instead of context.ApiResult
         }
 
         await next();

@@ -1,4 +1,5 @@
 ﻿using Airways.Application.Models;
+using Airways.Core.Common;
 using Airways.Core.Exceptions;
 using Newtonsoft.Json;
 
@@ -45,10 +46,10 @@ public class ExceptionHandlerMiddlewear
             DirectoryNotFoundException => StatusCodes.Status404NotFound,
             ResourceNotFound => StatusCodes.Status404NotFound,
             BadHttpRequestException => StatusCodes.Status400BadRequest,
-
+            _ => StatusCodes.Status500InternalServerError
         };
 
-        var result = JsonConvert.SerializeObject(ApiResult<string>.Failure(errors));
+        var result = JsonConvert.SerializeObject(ApiResult<string>.Failure(new Error(code.ToString(),code.ToString())));
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = code;
