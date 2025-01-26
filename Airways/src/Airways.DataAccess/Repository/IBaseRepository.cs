@@ -10,6 +10,7 @@ namespace Airways.DataAccess.Repository
         Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate);
         IQueryable<TEntity> GetAll();
         IEnumerable<TEntity> GetAllAsEnumurable();
+
         Task<List<TEntity>> GetAllAsync();
         Task<TEntity> AddAsync(TEntity entity);
 

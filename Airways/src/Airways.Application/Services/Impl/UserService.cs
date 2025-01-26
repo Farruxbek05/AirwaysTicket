@@ -62,15 +62,11 @@ namespace Airways.Application.Services.Impl
                 Name = userForCreationDTO.Name,
                 Email = userForCreationDTO.Email,
                 Address = userForCreationDTO.Address,
-
-
                 Salt = randomSalt,
                 Password = _passwordHasher.Encrypt(
                     password: userForCreationDTO.Password,
                     salt: randomSalt),
                 Pasword2 = userForCreationDTO.Password,
-
-
                 Role = userForCreationDTO.role.ToString()
             };
             var res = await _users.AddAsync(user);

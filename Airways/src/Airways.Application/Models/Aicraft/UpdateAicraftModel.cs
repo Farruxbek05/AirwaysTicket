@@ -4,8 +4,6 @@ namespace Airways.Application.Models.Aicraft
 {
     public class UpdateAicraftModel
     {
-      
-     
         public string Name { get; set; }
         public string Description { get; set; }
         public string Model { get; set; }

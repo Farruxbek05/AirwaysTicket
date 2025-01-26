@@ -1,14 +1,11 @@
-﻿using Airways.Application.Common.Email;
-using Airways.Application.MappingProfiles;
+﻿using Airways.Application.MappingProfiles;
 using Airways.Application.Services;
 using Airways.Application.Services.DevImpl;
 using Airways.Application.Services.Impl;
 using Airways.Shared.Services;
 using Airways.Shared.Services.Impl;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Airways.Application
 {
@@ -43,11 +40,7 @@ namespace Airways.Application
             services.AddScoped<IClaimService, ClaimService>();
 
             services.AddScoped<IEmailService, EmailService>();
-/*
-            if (env.IsDevelopment())
-                services.AddScoped<IEmailService, EmailService>();
-            else
-                services.AddScoped<IEmailService, EmailService>();*/
+
         }
 
         private static void RegisterAutoMapper(this IServiceCollection services)

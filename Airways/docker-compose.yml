@@ -1,0 +1,26 @@
+services:
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - airways
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=localhost;Database=airways;Username=postgres;Password=20050725
+
+  db:
+    image: postgres:15
+    container_name: airwaysname
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: airways
+      POSTGRES_PASSWORD: 20050725
+      POSTGRES_DB: airways
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

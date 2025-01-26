@@ -185,7 +185,7 @@ namespace Airways.Application.Services.DevImpl
                     var _redis = scope.ServiceProvider.GetRequiredService<IConnectionMultiplexer>();
                     var db = _redis.GetDatabase();
 
-                    await db.StringSetAsync($"VerificationCode:{user.Email}", JsonConvert.SerializeObject(verificationRecord), DateTime.UtcNow.AddMinutes(15));
+                    await db.StringSetAsync($"VerificationCode:{user.Email}", JsonConvert.SerializeObject(verificationRecord));
 
                 }
             }
