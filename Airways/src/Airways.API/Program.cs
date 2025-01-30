@@ -10,33 +10,29 @@ using Airways.DataAccess.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Quartz;
-using Quartz.Impl;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddQuartz(q =>
 {
-   
-    q.AddJob<DailyJob>(opts => opts.WithIdentity("dailyRabbitMqJob", "group1"));
+
+    q.AddJob<RabbitJob>(opts => opts.WithIdentity("dailyRabbitMqJob", "group1"));
     q.AddTrigger(opts => opts
         .ForJob("dailyRabbitMqJob", "group1")
         .WithIdentity("dailyTrigger", "group1")
         .StartNow()
-        .WithCronSchedule("0 0 13 * * ?")); 
+        .WithSimpleSchedule(x => x.WithIntervalInMinutes(2).RepeatForever()));
+    
 });
 
-// Add Quartz hosted service
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
-// RabbitMqConsumer'ni DI konteynerga qo'shish
-builder.Services.AddSingleton<RabbitMqConsumer>(sp => new RabbitMqConsumer("api.requests"));
+builder.Services.AddSingleton<RabbitMqConsumer>(sp => new RabbitMqConsumer("api.Airways"));
 
-// Add other services
 builder.Services.Configure<GoogleSmtpSettings>(builder.Configuration.GetSection("GoogleSmtpSettings"));
 builder.Services.AddControllers(config => config.Filters.Add(typeof(ValidateModelAttribute)));
 
-// Redis configuration
 var redisOptions = new ConfigurationOptions
 {
     EndPoints = { builder.Configuration.GetConnectionString("Redis").Split(',')[0] },
@@ -75,11 +71,9 @@ builder.Services.AddHostedService<ScheduledBackgroundService>();
 
 var app = builder.Build();
 
-// Migrate the database if necessary
 using var scope = app.Services.CreateScope();
 await AutomatedMigration.MigrateAsync(scope.ServiceProvider);
 
-// Middleware configuration
 app.UseSwagger();
 app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Airways API"); });
 

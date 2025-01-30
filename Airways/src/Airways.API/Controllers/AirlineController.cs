@@ -14,7 +14,7 @@ namespace Airways.API.Controllers
             _airlineService = airlineService;
         }
         [HttpGet]
-        public async Task<ActionResult<ApiResult<List<AirlineResponceModel>>>> GetAll()
+    public async Task<ActionResult<ApiResult<List<AirlineResponceModel>>>> GetAll()
         {
             var result = await _airlineService.GetAllAsync();
             var response = ApiResult<List<AirlineResponceModel>>.Success(result);

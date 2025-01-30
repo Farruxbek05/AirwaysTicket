@@ -37,13 +37,13 @@ namespace Airways.API
 
                 messages.Add(message);
             };
-
+             
             channel.BasicConsume(queue: _queueName,
                                  autoAck: true,
                                  consumer: consumer);
 
             Console.WriteLine("Waiting for messages...");
-            manualResetEvent.WaitOne(TimeSpan.FromSeconds(10)); 
+            manualResetEvent.WaitOne(TimeSpan.FromSeconds(5)); 
             return messages;
         }
     }

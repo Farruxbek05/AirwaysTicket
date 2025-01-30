@@ -16,28 +16,24 @@ namespace Airways.API.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            
+           
             var requestData = new
             {
                 Method = context.Request.Method,
                 Path = context.Request.Path,
                 QueryString = context.Request.QueryString.ToString(),
                 Headers = context.Request.Headers,
-                Body = await ReadRequestBodyAsync(context.Request)
+                //Body = await ReadRequestBodyAsync(context.Request)
             };
 
-           
-            SendToRabbitMq("api.requests", requestData);
-
-           
+          
             var originalResponseBodyStream = context.Response.Body;
             using var responseBody = new MemoryStream();
             context.Response.Body = responseBody;
 
-          
             await _next(context);
 
-         
+            
             context.Response.Body.Seek(0, SeekOrigin.Begin);
             var responseBodyText = await new StreamReader(context.Response.Body).ReadToEndAsync();
             context.Response.Body.Seek(0, SeekOrigin.Begin);
@@ -45,13 +41,20 @@ namespace Airways.API.Middleware
             var responseData = new
             {
                 StatusCode = context.Response.StatusCode,
-                Body = responseBodyText
-            };
+                //Body = responseBodyText
+            }; 
 
            
-            SendToRabbitMq("api.responses", responseData);
+            var combinedData = new
+            {
+                Request = requestData,
+                Response = responseData
+            };
 
           
+            SendToRabbitMq("api.Airways", combinedData);
+
+           
             await responseBody.CopyToAsync(originalResponseBodyStream);
         }
 
@@ -85,4 +88,5 @@ namespace Airways.API.Middleware
                                  body: body);
         }
     }
+
 }

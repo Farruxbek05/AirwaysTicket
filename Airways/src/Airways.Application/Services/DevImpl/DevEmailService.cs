@@ -1,6 +1,5 @@
 ﻿using Airways.Application.Common;
 using Airways.Application.Common.Email;
-using Airways.Application.DTO;
 using Airways.Application.Models;
 using Airways.Core.Entity;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,7 @@ namespace Airways.Application.Services.DevImpl
         private readonly GoogleSmtpSettings _smtpSettings;
         private readonly IServiceProvider _serviceProvider;
 
-        public EmailService(IOptions<GoogleSmtpSettings> smtpSettings,IServiceProvider serviceProvider )
+        public EmailService(IOptions<GoogleSmtpSettings> smtpSettings, IServiceProvider serviceProvider)
         {
             _smtpSettings = smtpSettings.Value;
             _serviceProvider = serviceProvider;
