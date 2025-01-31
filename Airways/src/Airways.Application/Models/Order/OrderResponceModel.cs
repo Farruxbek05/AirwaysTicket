@@ -2,9 +2,8 @@
 
 namespace Airways.Application.Models.Order
 {
-    public class OrderResponceModel
+    public class OrderResponceModel:BaseResponceModel
     {
-      
         public decimal TotalPrice { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Airways.Application.Models.Aicraft;
 using Airways.Core.Entity;
 using Airways.DataAccess.Repository;
+using Airways.DataAccess.Repository.Impl;
 using AutoMapper;
 
 namespace Airways.Application.Services.Impl
@@ -53,15 +54,16 @@ namespace Airways.Application.Services.Impl
             };
         }
 
-        public async Task<BaseResponceModel> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var todoItem = await _aicraftrepository.GetFirstAsync(ti => ti.Id == id);
+            if (todoItem == null) return false;
 
-            return new BaseResponceModel
-            {
-                Id = (await _aicraftrepository.DeleteAsync(todoItem)).Id
-            };
+            await _aicraftrepository.DeleteAsync(todoItem);
+
+            return true;
         }
+
 
         public async Task<List<AicraftResponceModel>> GetAllAsync(CancellationToken cancellationToken = default)
         {

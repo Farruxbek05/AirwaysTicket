@@ -2,6 +2,7 @@
 using Airways.Application.Models;
 using Airways.Application.Models.Order;
 using Airways.DataAccess.Repository;
+using Airways.DataAccess.Repository.Impl;
 using AutoMapper;
 using Newtonsoft.Json;
 using StackExchange.Redis;
@@ -69,15 +70,16 @@ namespace Airways.Application.Services.Impl
             };
         }
 
-        public async Task<BaseResponceModel> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var todoItem = await _orderRepository.GetFirstAsync(ti => ti.Id == id);
+            if (todoItem == null) return false;
 
-            return new BaseResponceModel
-            {
-                Id = (await _orderRepository.DeleteAsync(todoItem)).Id
-            };
+            await _orderRepository.DeleteAsync(todoItem);
+
+            return true;
         }
+
 
 
     }

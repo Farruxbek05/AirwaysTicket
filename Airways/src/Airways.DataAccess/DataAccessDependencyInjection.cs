@@ -19,7 +19,6 @@ namespace Airways.DataAccess
             services.AddRepositories();
             return services;
         }
-
         private static void AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IAircraftRepository, AicraftRepository>();
@@ -54,7 +53,7 @@ namespace Airways.DataAccess
                         npgsqlOptions => npgsqlOptions.MigrationsAssembly(typeof(DataBaseContext).Assembly.FullName)));
             }
         }
-
+        
         private static void AddIdentity(this IServiceCollection services)
         {
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)

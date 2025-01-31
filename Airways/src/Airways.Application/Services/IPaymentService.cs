@@ -9,7 +9,7 @@ namespace Airways.Application.Services
         Task<CreatePaymentResponceModel> CreateAsync(CreatePaymentModel createTodoItemModel,
       CancellationToken cancellationToken = default);
 
-        Task<BaseResponceModel> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAsync(Guid id);
 
         Task<List<PaymentResponceModel>> GetAllAsync(CancellationToken cancellationToken = default);
 

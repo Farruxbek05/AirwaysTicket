@@ -1,9 +1,8 @@
 ﻿using Airways.Core.Entity;
-using System.ComponentModel.DataAnnotations;
 
 namespace Airways.Application.Models.Ticket
 {
-    public class TicketResponceModel
+    public class TicketResponceModel:BaseResponceModel
     {
         public Status Status { get; set; } = Status.Available;
         public string PassengerName { get; set; }

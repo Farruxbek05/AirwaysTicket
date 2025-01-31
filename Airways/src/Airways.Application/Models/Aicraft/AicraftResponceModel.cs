@@ -2,10 +2,8 @@
 
 namespace Airways.Application.Models.Aicraft
 {
-    public class AicraftResponceModel
+    public class AicraftResponceModel:BaseResponceModel
     {
-        
-      
         public string Name { get; set; }
         public string Description { get; set; }
         public string Model { get; set; }

@@ -1,5 +1,4 @@
 ﻿using Airways.Application.DTO;
-using Airways.Application.Models.Ticket;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -26,7 +25,7 @@ namespace Airways.Application.BackgroundServices
 
             var now = DateTime.Now;
 
-            var nextRun = now.AddMinutes(1); 
+            var nextRun = now.AddMinutes(1);
 
             var initialDelay = nextRun - now;
 

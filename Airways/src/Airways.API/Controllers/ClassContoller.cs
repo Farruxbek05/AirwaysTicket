@@ -39,7 +39,7 @@ namespace Airways.API.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            return Ok(ApiResult<BaseResponceModel>.Success(await _classService.DeleteAsync(id)));
+            return Ok(ApiResult<bool>.Success(await _classService.DeleteAsync(id)));
         }
     }
 }

@@ -63,16 +63,17 @@ namespace Airways.Application.Services.Impl
             };
         }
 
-        public async Task<BaseResponceModel> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<bool> DeleteAsync(Guid id)
         {
             var todoItem = await _pricepolicyRepository.GetFirstAsync(ti => ti.Id == id);
+            if (todoItem == null) return false;
 
-            return new BaseResponceModel
-            {
-                Id = (await _pricepolicyRepository.DeleteAsync(todoItem)).Id
-            };
+            await _pricepolicyRepository.DeleteAsync(todoItem);
+
+            return true;
         }
 
-        
+
+
     }
 }
