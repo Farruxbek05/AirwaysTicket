@@ -8,7 +8,6 @@ using Airways.Application.Models.Review;
 using Airways.Application.Models.Reys;
 using Airways.Application.Models.Ticket;
 using Airways.Application.Services;
-using Airways.Core.Entity;
 using Moq;
 
 namespace AirwaysTest
@@ -37,7 +36,7 @@ namespace AirwaysTest
             _reysService = new Mock<IReysService>();
             _orderService = new Mock<IOrderService>();
             _paymentService = new Mock<IPaymentService>();
-            _pricepolicyService= new Mock<IPricePolicyService>();
+            _pricepolicyService = new Mock<IPricePolicyService>();
         }
 
         #region Airline
@@ -48,7 +47,7 @@ namespace AirwaysTest
 
             _airlineService.Setup(x => x.DeleteAsync(id)).ReturnsAsync(true);
 
-            var service=_airlineService.Object;
+            var service = _airlineService.Object;
 
             bool result = await service.DeleteAsync(id);
 
@@ -191,7 +190,7 @@ namespace AirwaysTest
             var airlines = new List<ReviewResponceModel>
         {
             new ReviewResponceModel { Id = Guid.NewGuid() }
-         
+
         };
 
             _reviewService.Setup(x => x.GetAllAsync(It.IsAny<CancellationToken>())).ReturnsAsync(airlines);
@@ -207,7 +206,7 @@ namespace AirwaysTest
         public async Task Review_Create()
         {
             Guid id = Guid.Parse("d468d3d5-7e3a-490e-98d2-9299d4420ea0");
-            var createModel = new CreateReviewModel { Comment = "New Review", Rating=2,ReysId=id,UserId=id };
+            var createModel = new CreateReviewModel { Comment = "New Review", Rating = 2, ReysId = id, UserId = id };
             var responseModel = new CreateReviewResponceModel { Id = Guid.NewGuid() };
 
             _reviewService.Setup(x => x.CreateAsync(createModel, It.IsAny<CancellationToken>())).ReturnsAsync(responseModel);
@@ -352,7 +351,7 @@ namespace AirwaysTest
         public async Task Class_Update()
         {
             Guid id = Guid.NewGuid();
-            var updateModel = new UpdateClassModel {  description = "Norm" };
+            var updateModel = new UpdateClassModel { description = "Norm" };
             var responseModel = new UpdateClassResponceModel { Id = id };
 
             _classService.Setup(x => x.UpdateAsync(id, updateModel, It.IsAny<CancellationToken>())).ReturnsAsync(responseModel);
@@ -528,7 +527,7 @@ namespace AirwaysTest
         [Fact]
         public async Task Payment_Create()
         {
-            var createModel = new  CreatePaymentModel { Amount = 222 };
+            var createModel = new CreatePaymentModel { Amount = 222 };
             var responseModel = new CreatePaymentResponceModel { Id = Guid.NewGuid() };
 
             _paymentService.Setup(x => x.CreateAsync(createModel, It.IsAny<CancellationToken>())).ReturnsAsync(responseModel);

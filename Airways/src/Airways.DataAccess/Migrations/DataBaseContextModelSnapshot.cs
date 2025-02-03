@@ -230,6 +230,27 @@ namespace Airways.DataAccess.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("Airways.Core.Entity.Person", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Persons");
+                });
+
             modelBuilder.Entity("Airways.Core.Entity.PricePolicy", b =>
                 {
                     b.Property<Guid>("Id")

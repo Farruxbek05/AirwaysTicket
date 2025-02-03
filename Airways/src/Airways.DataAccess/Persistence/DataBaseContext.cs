@@ -30,6 +30,7 @@ public class DataBaseContext : IdentityDbContext<ApplicationUser>
     public DbSet<Tickets> Tickets { get; set; }
     public DbSet<User> AirwaysUser { get; set; }
     public DbSet<ApiLog> Apilog { get; set; }
+    public DbSet<Person> Persons { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

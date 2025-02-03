@@ -38,7 +38,7 @@ namespace Airways.Application
             services.AddScoped<IClaimService, ClaimService>();
             services.AddScoped<ITemplateService, TemplateService>();
             services.AddScoped<IClaimService, ClaimService>();
-
+            services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IEmailService, EmailService>();
 
         }

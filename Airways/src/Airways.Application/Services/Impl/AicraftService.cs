@@ -47,7 +47,7 @@ namespace Airways.Application.Services.Impl
             var todoItem = await _aicraftrepository.GetFirstAsync(ti => ti.Id == id);
 
             _mapper.Map(updateTodoItemModel, todoItem);
-
+             
             return new UpdateAicraftResponceModel
             {
                 Id = (await _aicraftrepository.UpdateAsync(todoItem)).Id

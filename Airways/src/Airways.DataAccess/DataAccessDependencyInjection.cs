@@ -33,6 +33,7 @@ namespace Airways.DataAccess
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPasswordHasher, PasswordHasher>();
             services.AddScoped<IJwtTokenHandler, JwtTokenHandler>();
+            services.AddScoped<IPersonRepository, PersonRepository>();
 
 
         }
