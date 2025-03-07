@@ -4,8 +4,6 @@ namespace Airways.Application.Models.Aicraft;
 
 public class CreateAircraftModel
 {
-   
-   
     public string Name { get; set; }
     public string Description { get; set; }
     public string Model { get; set; }

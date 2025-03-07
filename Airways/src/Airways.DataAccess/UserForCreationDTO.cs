@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Airways.DataAccess
 {
@@ -20,6 +21,7 @@ namespace Airways.DataAccess
 
         
         public required string Password { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public TableRole role { get; set; }
         public IFormFile ProfileImage { get; set; }
     }

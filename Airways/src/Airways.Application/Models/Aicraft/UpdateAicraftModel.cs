@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Airways.Application.Models.Aicraft
+﻿namespace Airways.Application.Models.Aicraft
 {
     public class UpdateAicraftModel
     {

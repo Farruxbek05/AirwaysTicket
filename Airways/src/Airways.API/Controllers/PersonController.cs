@@ -1,6 +1,4 @@
 ﻿using Airways.Application.MediatrCRUD;
-using Airways.Application.Models;
-using Airways.Core.Entity;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,13 +21,13 @@ namespace Airways.API.Controllers
         {
             var result = await _mediator.Send(command);
 
-            // Agar failure bo‘lsa, BadRequest qaytarish
+
             if (result.IsFailure)
             {
                 return BadRequest(new { Error = result.Error?.message });
             }
 
-            // Agar success bo‘lsa, Id ni qaytarish
+
             return Created("", new { Id = result.Value, Message = "Person successfully created" });
         }
 
@@ -43,10 +41,10 @@ namespace Airways.API.Controllers
         {
             var result = await _mediator.Send(new GetAllPersonsQuery());
 
-            if (result.IsFailure) // ❗ Agar failure bo‘lsa, NotFound qaytaramiz
+            if (result.IsFailure)
                 return NotFound(new { Error = result.Error?.message });
 
-            return Ok(result.Value); // ✅ Bu joy faqat muvaffaqiyatli natija bo‘lsa ishlaydi
+            return Ok(result.Value);
         }
 
 

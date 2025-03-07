@@ -4,9 +4,6 @@ using Airways.API.Middleware;
 using Airways.Application;
 using Airways.Application.BackgroundServices;
 using Airways.Application.Common.Email;
-using Airways.Application.MediatrCRUD;
-using Airways.Application.Models;
-using Airways.Core.Entity;
 using Airways.DataAccess;
 using Airways.DataAccess.Authentication;
 using Airways.DataAccess.Persistence;
@@ -28,12 +25,9 @@ builder.Services.AddQuartz(q =>
         .WithIdentity("dailyTrigger", "group1")
         .StartNow()
         .WithSimpleSchedule(x => x.WithIntervalInHours(24).RepeatForever()));
-    
+
 });
-builder.Services.AddTransient<IRequestHandler<CreatePersonCommand, ApiResult<int>>, CreatePersonHandler>();
-builder.Services.AddTransient<IRequestHandler<UpdatePersonCommand, ApiResult<int>>, UpdatePersonHandler>();
-builder.Services.AddTransient<IRequestHandler<DeletePersonCommand, ApiResult>, DeletePersonHandler>(); 
-builder.Services.AddTransient<IRequestHandler<GetAllPersonsQuery, ApiResult<List<Person>>>, GetAllPersonsHandler>();
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);

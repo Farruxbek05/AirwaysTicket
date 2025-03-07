@@ -47,7 +47,7 @@ namespace Airways.Application.Services.Impl
                 Address = user.Address,
                 Id = user.Id
             }).ToList();
-            
+
         }
 
         public async Task<UserForCreationDTO> AddUserAsync(UserForCreationDTO userForCreationDTO)
@@ -76,7 +76,7 @@ namespace Airways.Application.Services.Impl
                 Email = userForCreationDTO.Email,
                 Name = userForCreationDTO.Name,
             };
-           await _emailService.SendEmailAsync(user);
+            //   await _emailService.SendEmailAsync(user);
 
             return userForCreationDTO;
         }

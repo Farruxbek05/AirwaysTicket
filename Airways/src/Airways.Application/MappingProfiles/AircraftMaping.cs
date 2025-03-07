@@ -10,8 +10,9 @@ namespace Airways.Application.MappingProfiles
         {
             CreateMap<CreateAircraftModel, Aicraft>();
             CreateMap<UpdateAicraftModel, Aicraft>().ReverseMap();
-
             CreateMap<Aicraft, AicraftResponceModel>();
+
+
         }
     }
 }

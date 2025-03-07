@@ -4,7 +4,6 @@ namespace Airways.Application.Models.Payment;
 
 public class CreatePaymentModel
 {
-  
     public decimal Amount { get; set; }
     public PayStatus payStatus { get; set; }
     public CardType paymentType { get; set; }
